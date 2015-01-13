@@ -7,8 +7,8 @@ This tool is experimental and still in development. Feel free to post any issues
 **Python 3** and **Docker** are needed to build Blink.  
 
 **Python 3**  
-For Fedora: `sudo yum install python3 python3-dbus`  
-For Ubuntu/Debian: `sudo apt-get install python3 python3-dbus`  
+For Fedora: `sudo yum install python3`  
+For Ubuntu/Debian: `sudo apt-get install python3`  
 
 **Docker**  
 For Fedora: [Link](https://docs.docker.com/installation/fedora/)  
