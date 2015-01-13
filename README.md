@@ -24,5 +24,5 @@ Run the **install.py** script to build Blink from scratch. The process can take 
 Run the **run.py** and it will launch a browsing platform on the fly in a matter of seconds. The script checks if the installation was correct so if the script encounters any problems during this step, go through the complete installation process again.
 
 ### Windows and MacOS support ###
-While Windows and MacOS are not officially supported yet, it may be possible to run Blink with these platforms via the Boot2Docker infrastructure.  
-For more information, go [HERE](https://docs.docker.com/installation/windows/) for Windows and [HERE](https://docs.docker.com/installation/mac/) for MacOS.
+While Windows and MacOS are not officially supported yet, it should be possible to run Blink on these platforms via a Linux virtual machine with VirtualBox or VMWare.  
+It should be noted that we may investigate the use of Boot2Docker in the future to improve performances.
