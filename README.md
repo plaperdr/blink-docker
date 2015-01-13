@@ -1,4 +1,4 @@
-# Blink + Docker = <3 #
+# Blink + Docker = :heart: #
 
 ### Disclaimer ###
 This tool is experimental and still in development. Feel free to post any issues you encounter so that we can squash the remaining bugs that are hiding. Any suggestions or any improvement ideas are welcome to make Blink with Docker a better and stable tool.
