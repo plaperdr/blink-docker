@@ -1,3 +1,7 @@
 .idea/
 *~
 installComplete
+docker/fonts/ALL_FONTS
+docker/plugins/ALL_PLUGINS
+docker/scripts/Dockerfile
+data/profile/data.json
