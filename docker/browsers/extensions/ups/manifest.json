@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "key":"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJGkMWn4RXMLn0JY4V3kEFkfdlpJzMcD5pSzM8l86o",
+  "name": "User-Profile Sync",
+  "short_name": "UPS",
+  "description": "Profile synchronisation extension for Blink",
+  "version": "0.1",
+  "author": "Blink",
+  "offline_enabled": true,
+  "options_page": "options.html",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "permissions": [
+    "tabs",
+    "bookmarks",
+    "storage",
+	"nativeMessaging"
+  ]
+}
+

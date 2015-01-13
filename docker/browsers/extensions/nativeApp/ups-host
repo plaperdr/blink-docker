@@ -1,0 +1,91 @@
+#!/usr/bin/env python
+import struct
+import sys
+import threading
+import Queue
+import pickle
+from os.path import expanduser,exists
+
+#################################  CONFIG  #################################
+def relativeToAbsoluteHomePath(path):
+    """ Tranforms a relative home path into an absolute one
+    Argument:
+    path -- the path that may need transformation"""
+    if "~" in path:
+        return path.replace("~",expanduser("~"))
+    else:
+        return path
+
+profileFolder = relativeToAbsoluteHomePath("~/.config/google-chrome/Default/")
+
+#################################  MESSAGES  #################################
+# Helper function that sends a message to the webapp.
+def send_message(message):
+  # Write message size.
+  sys.stdout.write(struct.pack('I', len(message)))
+  # Write the message itself.
+  sys.stdout.write(message)
+  sys.stdout.flush()
+
+# Thread that reads messages from the webapp.
+def read_thread_func(queue):
+  while 1:
+    # Read the message length (first 4 bytes).
+    text_length_bytes = sys.stdin.read(4)
+
+    if len(text_length_bytes) == 0:
+      if queue:
+        queue.put(None)
+      sys.exit(0)
+
+    # Unpack message length as 4 byte integer.
+    text_length = struct.unpack('i', text_length_bytes)[0]
+
+    # Read the text (JSON object) of the message.
+    text = sys.stdin.read(text_length)
+
+    if queue:
+      queue.put(text)
+    else:
+      # In headless mode just send an echo message back.
+      send_message('{"echo": %s}' % text)
+
+
+#################################  UPS ACCESSOR  #################################
+class UPSAccessor():
+  def __init__(self, queue):
+    self.queue = queue
+
+  def processMessages(self):
+    message = self.queue.get()
+    if message == None:
+      sys.exit(0)
+                
+    with open(profileFolder+"shared.pkl",'wb') as sharedFile:
+      pickle.dump(message,sharedFile,protocol=2)
+
+
+#################################  MAIN  #################################
+def Main():
+  queue = Queue.Queue()
+  accessor = UPSAccessor(queue)
+
+  thread = threading.Thread(target=read_thread_func, args=(queue,))
+  thread.daemon = True
+  thread.start()
+
+  #SEND OPEN TABS
+  if exists(profileFolder+"shared.pkl"):
+    with open(profileFolder+"shared.pkl",'rb') as sharedFile:
+      message = pickle.load(sharedFile)
+      send_message(message)
+  
+  #LAUNCH WORKER
+  while True:
+    accessor.processMessages()
+
+  sys.exit(0)
+
+
+if __name__ == '__main__':
+  Main()

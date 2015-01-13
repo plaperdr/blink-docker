@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>UPS Options</title>
+		<link rel="stylesheet" type="text/css" href="options.css"/>
+	</head>
+
+	<body>
+		<header>
+			UPS Options
+		</header>
+		<form>
+			</br>
+			<input type="checkbox" id="passwordStorage" name="passwordStorage" value="choice">Enable passwords storage</br>
+			If this option is enabled, passwords will be stored in the data file. If encryption is disabled, passwords will be stored in plaintext.</br></br>
+			<input type="checkbox" id="passwordEncryption" name="passwordEncryption" value="choice">Enable passwords encryption</br>
+			If this option is enabled, the user will need to enter a Master Password to securely encrypt the complele data file.</br>
+		</form> 
+
+		<div id="status"></div>
+		<button id="save">Save</button>
+	</body>
+
+	<script src="options.js"></script>
+
+</html>
