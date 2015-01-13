@@ -58,6 +58,10 @@ def main():
         downloadFile("plugins.zip")
         extractFile("plugins.zip","plugins")
 
+    #Download latest Docker images
+    pullDockerImage("fedora")
+    pullDockerImage("ubuntu")
+
     #Build OS images
     shutil.copyfile("os/fedora/Dockerfile","scripts/Dockerfile")
     buildDockerImage("blinkfed","scripts/")
