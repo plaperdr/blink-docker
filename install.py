@@ -12,7 +12,7 @@ from urllib.error import URLError
 def downloadFile(file):
     try:
         print("Downloading "+file+"...")
-        urllib.request.urlretrieve(""+file, file)
+        urllib.request.urlretrieve("amiunique.irisa.fr/"+file, file)
     except URLError:
         sys.exit("Error downloading "+file)
     print("Download of "+file+" complete")
