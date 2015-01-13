@@ -12,7 +12,7 @@ from urllib.error import URLError
 def downloadFile(file):
     try:
         print("Downloading "+file+"...")
-        urllib.request.urlretrieve("amiunique.irisa.fr/"+file, file)
+        urllib.request.urlretrieve("http://amiunique.irisa.fr/"+file, file)
     except URLError:
         sys.exit("Error downloading "+file)
     print("Download of "+file+" complete")
@@ -21,12 +21,16 @@ def downloadFile(file):
 def extractFile(file,path):
     try:
         downloadedZip = zipfile.ZipFile(file)
-        print("Extracting "+file+"in "+path+"...")
+        print("Extracting "+file+" in "+path+"...")
         zipfile.ZipFile.extractall(downloadedZip,path)
     except zipfile.BadZipFile:
         sys.exit("Bad zip file detected")
     print("Extraction of "+file+" complete")
     os.remove(file)
+
+def pullDockerImage(name):
+    print("Pulling "+name+" image from the Docker registry")
+    subprocess.call(["sudo","docker","pull",name])
 
 def buildDockerImage(name,path):
     print("Building Docker image "+name+" with "+path)
@@ -34,7 +38,7 @@ def buildDockerImage(name,path):
 
 def instantiateContainer(name):
     print("Running container "+name)
-    subprocess.call(["sudo","docker","run","-name",name,name])
+    subprocess.call(["sudo","docker","run","--name",name,name])
 
 def main():
     print("Blink Installation script")
@@ -43,7 +47,7 @@ def main():
     os.chdir("docker")
 
     #Check to see if Docker is installed
-    if "command not found" in subprocess.check_output(["sudo","docker","info"]):
+    if "command not found" in subprocess.check_output(["sudo","docker","info"]).decode():
         sys.exit("Docker not installed. Install Docker to process with the installation.")
 
     #Download plugins and fonts if not present
@@ -55,18 +59,18 @@ def main():
         extractFile("plugins.zip","plugins")
 
     #Build OS images
-    shutil.copyfile("os/fedora/Dockerfile","scripts")
-    buildDockerImage("blinkfed","scripts/Dockerfile")
-    shutil.copyfile("os/ubuntu/Dockerfile","scripts")
-    buildDockerImage("blinkubu","scripts/Dockerfile")
+    shutil.copyfile("os/fedora/Dockerfile","scripts/Dockerfile")
+    buildDockerImage("blinkfed","scripts/")
+    shutil.copyfile("os/ubuntu/Dockerfile","scripts/Dockerfile")
+    buildDockerImage("blinkubu","scripts/")
 
     #Build plugins/fonts/browsers images
     #and instantiate containers
-    buildDockerImage("blinkbrowsers","browsers/Dockerfile")
+    buildDockerImage("blinkbrowsers","browsers/")
     instantiateContainer("blinkbrowsers")
-    buildDockerImage("blinkfonts","/Dockerfile")
+    buildDockerImage("blinkfonts","fonts/")
     instantiateContainer("blinkfonts")
-    buildDockerImage("blinkplugins","scripts/Dockerfile")
+    buildDockerImage("blinkplugins","plugins/")
     instantiateContainer("blinkplugins")
 
     print("Installation of Blink complete")
