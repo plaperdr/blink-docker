@@ -97,8 +97,12 @@ class Container(object):
     def checkDataFile():
         if os.path.isfile(Container.encryptedDataFile):
             #We decrypt it
-            #TO IMPLEMENT
-            t = 1
+            cancelled = False
+            while not os.path.isfile(Container.dataFile) and not cancelled:
+                res = subprocess.getstatusoutput("gpg2 -d -o "+Container.dataFile+" "+Container.encryptedDataFile)
+                if res[0] != 0 and "cancelled" in res[1]:
+                    cancelled = True
+            subprocess.call("rm "+Container.encryptedDataFile,shell=True)
         elif not os.path.isfile(Container.dataFile):
             jsonData = {"bookmarks":
                             [{"name":"Bookmarks Toolbar","children":[],"type":"folder"},
@@ -151,6 +155,18 @@ def main():
         encryption = browser.exportData()
 
         #Encrypt file if the encryption is activated
+        if encryption :
+            done = False
+            while not done :
+                res = subprocess.getstatusoutput("gpg2 -c --cipher-algo=AES256 "+Container.dataFile)
+                if res[0] == 0 :
+                    #If the encryption went well, we removed the unencrypted file
+                    subprocess.call("rm "+Container.dataFile,shell=True)
+                    done = True
+                elif "cancelled" in res[1]:
+                    #If the user cancelled the encryption operation, we do nothing
+                    done = True
+
 
         #We write a file to signal the host to shutdown all running VMs
         #subprocess.call("touch "+VM.sharedFolder+"VM.shutdown", shell=True)
