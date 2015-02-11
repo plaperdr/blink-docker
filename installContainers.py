@@ -77,7 +77,7 @@ def main():
     buildDockerImage("blinkplugins","plugins/")
     instantiateContainer("blinkplugins")
 
-    print("Installation of Blink complete")
+    print("Installation of Blink containers complete")
 
 if __name__ == "__main__":
     main()
