@@ -11,7 +11,7 @@ import urllib.request
 
 osImages = ["blinkfed","blinkubu"]
 ubuntuName = "vivid"
-fedoraName = "f21"
+fedoraName = "fc21"
 
 def checkInstallation():
     #Check the presence of the three main containers
@@ -35,11 +35,14 @@ def generateLibrairies():
     #Fedora
     #We retrieve the kernel version of Fedora
     #ex: 3.18.5-201.fc21.x86_64
-    fedKernel = ""
+    fedSource = urllib.request.urlopen("https://admin.fedoraproject.org/updates/kernel").read()
+    fedKernel = re.search("kernel-(.{1,20}"+fedoraName+")((?!testing).)*?stable",str(fedSource)).group(1)+".x86_64"
     #We write the header file
-    subprocess.call(["echo","\"#define "+fedKernel+"\"",">","preload/modUname.h"])
+    with open('ldpreload/modUname.h', 'w') as f:
+            f.write("#define RELEASE \""+fedKernel+"\"")
+    #subprocess.call("echo \"#define RELEASE \""+fedKernel+"\"\" > ldpreload/modUname.h", shell=True)
     #We compile the library
-    subprocess.call(["gcc","-Wall","-fPIC","-shared","-o","modFedUname.so","modUname.c"])
+    subprocess.call(["gcc","-Wall","-fPIC","-shared","-o","ldpreload/modFedUname.so","ldpreload/modUname.c"])
 
     #Ubuntu
     #We retrieve the kernel version of Ubuntu
@@ -48,15 +51,18 @@ def generateLibrairies():
                                        ubuntuName+"&section=main").read()
     ubuKernel = re.search("linux-image-(.*?)\">",str(ubuSource)).group(1)
     #We write the header file
-    subprocess.call(["echo","\"#define "+ubuKernel+"\"",">","preload/modUname.h"])
+    with open('ldpreload/modUname.h', 'w') as f:
+            f.write("#define RELEASE \""+ubuKernel+"\"")
+    #subprocess.call("echo \"#define RELEASE \""+ubuKernel+"\"\" > ldpreload/modUname.h", shell=True)
     #We compile the library
-    subprocess.call(["gcc","-Wall","-fPIC","-shared","-o","modUbuUname.so","modUname.c"])
+    subprocess.call(["gcc","-Wall","-fPIC","-shared","-o","ldpreload/modUbuUname.so","ldpreload/modUname.c"])
 
     print("LD Preload libraries generated")
 
     #We write a file that indicates that the installation is complete
     #This file contains the date of last generation
-    subprocess.call(["echo",datetime.date.today().toordinal(),">","installComplete"])
+    with open('installComplete', 'w') as f:
+            f.write(str(datetime.date.today().toordinal()))
     print("installComplete file written")
 
 def main():
@@ -89,6 +95,13 @@ def main():
                     "--volumes-from blinkplugins " \
                     "--volumes-from blinkfonts "
     chosenImage = osImages[random.randint(0,len(osImages)-1)]
+
+    #We select the corresponding LD Preload library
+    if chosenImage is "blinkfed":
+        subprocess.call(["cp","-f","ldpreload/modFedUname.so","ldpreload/modUname.so"])
+    else:
+        subprocess.call(["cp","-f","ldpreload/modUbuUname.so","ldpreload/modUname.so"])
+
     print("Image "+chosenImage+" chosen")
     subprocess.call(launchCommand+chosenImage,shell=True)
 
