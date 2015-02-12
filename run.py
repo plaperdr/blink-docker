@@ -40,7 +40,6 @@ def generateLibrairies():
     #We write the header file
     with open('ldpreload/modUname.h', 'w') as f:
             f.write("#define RELEASE \""+fedKernel+"\"")
-    #subprocess.call("echo \"#define RELEASE \""+fedKernel+"\"\" > ldpreload/modUname.h", shell=True)
     #We compile the library
     subprocess.call(["gcc","-Wall","-fPIC","-shared","-o","ldpreload/modFedUname.so","ldpreload/modUname.c"])
 
@@ -53,7 +52,6 @@ def generateLibrairies():
     #We write the header file
     with open('ldpreload/modUname.h', 'w') as f:
             f.write("#define RELEASE \""+ubuKernel+"\"")
-    #subprocess.call("echo \"#define RELEASE \""+ubuKernel+"\"\" > ldpreload/modUname.h", shell=True)
     #We compile the library
     subprocess.call(["gcc","-Wall","-fPIC","-shared","-o","ldpreload/modUbuUname.so","ldpreload/modUname.c"])
 
