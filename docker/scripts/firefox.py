@@ -18,4 +18,4 @@ class Firefox(Browser):
         return jsonExportData["passwordEncryption"]
             
     def runBrowser(self):
-        return subprocess.Popen(["./browsers/firefox/firefox","-no-remote"])
+        return subprocess.Popen("LD_PRELOAD=/home/blink/ldpreload/modUname.so ./browsers/firefox/firefox -no-remote", shell=True)
