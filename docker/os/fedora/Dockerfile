@@ -1,4 +1,4 @@
-FROM fedora:latest
+FROM fedora:21
 
 RUN yum localinstall -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 RUN yum update -y 
@@ -21,6 +21,7 @@ USER blink
 ENV HOME /home/blink
 
 RUN mkdir /home/blink/profile/
+RUN mkdir /home/blink/ldpreload/
 RUN mkdir /home/blink/.fonts/
 RUN mkdir /home/blink/.mozilla/
 RUN mkdir /home/blink/.mozilla/plugins/
