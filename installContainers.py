@@ -40,6 +40,33 @@ def instantiateContainer(name):
     print("Running container "+name)
     subprocess.call(["sudo","docker","run","--name",name,name])
 
+def updateGroupUserIDs():
+    #Get user ID
+    userID = subprocess.check_output(["id","-u"]).decode().strip()
+
+    #Get group ID
+    groupID = subprocess.check_output(["id","-g"]).decode().strip()
+
+    updateDockerfile("os/fedora/Dockerfile",userID,groupID)
+    updateDockerfile("os/ubuntu/Dockerfile",userID,groupID)
+    print("Dockerfile user/group IDs updated")
+
+def updateDockerfile(filePath,userID,groupID):
+    #Rewrite the Dockerfile with the correct user/group ID
+    with open(filePath,'r') as f:
+        newlines = []
+        for line in f.readlines():
+            if "uid" in line and "gid" in line:
+                line = line.replace('uid=1000', 'uid='+userID)
+                line = line.replace('gid=1000', 'gid='+groupID)
+                newlines.append(line)
+            else:
+                newlines.append(line)
+    with open(filePath, 'w') as f:
+        for line in newlines:
+            f.write(line)
+
+
 def main():
     print("Blink Installation script")
 
@@ -61,6 +88,9 @@ def main():
     #Download latest Docker images
     pullDockerImage("fedora")
     pullDockerImage("ubuntu")
+
+    #Update Dockerfiles to include the right user/group ID
+    updateGroupUserIDs()
 
     #Build OS images
     shutil.copyfile("os/fedora/Dockerfile","scripts/Dockerfile")
