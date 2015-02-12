@@ -109,7 +109,7 @@ class Chrome(Browser):
             
     #################################  PASSWORDS  #################################
     def importPasswords(self):
-        subprocess.call("cp -f /media/sf_Shared/Login\ Data ~/.config/google-chrome/Default/Login\ Data",shell=True)
+        #subprocess.call("cp -f /media/sf_Shared/Login\ Data ~/.config/google-chrome/Default/Login\ Data",shell=True)
         if self.jsonImportData["passwords"] != []:
             passwordsList = json.loads(json.dumps(self.jsonImportData["passwords"]))
                 
