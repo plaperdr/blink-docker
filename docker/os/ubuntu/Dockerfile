@@ -1,7 +1,7 @@
 FROM ubuntu:15.04
 
 RUN apt-get update && apt-get install -y wget djview-plugin browser-plugin-gnash browser-plugin-lightspark browser-plugin-packagekit browser-plugin-spice browser-plugin-vlc gxineplugin kopete-plugin-thinklight kpartsplugin mozplugger rhythmbox-mozilla totem-mozilla x2goplugin xine-plugin gecko-mediaplayer gnupg2 sqlite3 libpango1.0-0 sudo python3 python3-numpy
-
+RUN apt-get install -y libnss3
 RUN wget https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb
 RUN dpkg -i google-talkplugin_current_amd64.deb
 RUN mv /usr/lib/mozilla/plugins /usr/lib/mozilla/plugins.originals
