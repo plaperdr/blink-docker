@@ -92,7 +92,10 @@ def main():
                     "--volumes-from blinkbrowsers " \
                     "--volumes-from blinkplugins " \
                     "--volumes-from blinkfonts "
-    chosenImage = osImages[random.randint(0,len(osImages)-1)]
+    if len(sys.argv) == 2:
+        chosenImage = sys.argv[1]
+    else :
+        chosenImage = osImages[random.randint(0,len(osImages)-1)]
 
     #We select the corresponding LD Preload library
     if chosenImage is "blinkfed":
