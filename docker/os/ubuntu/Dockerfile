@@ -6,6 +6,7 @@ RUN wget https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb
 RUN dpkg -i google-talkplugin_current_amd64.deb
 RUN mv /usr/lib/mozilla/plugins /usr/lib/mozilla/plugins.originals
 RUN sudo ln -sf /lib/x86_64-linux-gnu/libudev.so.1 /usr/lib/libudev.so.0
+RUN rm -rf /usr/share/mozilla/extensions/*
 
 # Replace 1000 with your user / group id
 RUN export uid=1000 gid=1000 && \
