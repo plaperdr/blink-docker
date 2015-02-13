@@ -82,10 +82,11 @@ class Chrome(Browser):
         
         
     def exportBookmarks(self):
-        with open(self.profileFolder+self.bookmarksFile, 'r') as chromeBookmarks:
-            chromeJsonData = json.load(chromeBookmarks)
-        self.jsonExportData["bookmarks"][0]["children"] = chromeJsonData["roots"]["bookmark_bar"]["children"]
-        self.jsonExportData["bookmarks"][1]["children"] = chromeJsonData["roots"]["other"]["children"]
+        if os.path.isfile(self.profileFolder+self.bookmarksFile):
+            with open(self.profileFolder+self.bookmarksFile, 'r') as chromeBookmarks:
+                chromeJsonData = json.load(chromeBookmarks)
+            self.jsonExportData["bookmarks"][0]["children"] = chromeJsonData["roots"]["bookmark_bar"]["children"]
+            self.jsonExportData["bookmarks"][1]["children"] = chromeJsonData["roots"]["other"]["children"]
     
     #################################  OPEN TABS  #################################
     def importOpenTabs(self):
@@ -95,16 +96,17 @@ class Chrome(Browser):
     
     
     def exportOpenTabs(self):
-        with open(self.profileFolder+self.openTabsFile,'rb') as sharedFile:
-            jsonTabs = pickle.load(sharedFile)
-        data = json.loads(jsonTabs)
-        self.passwordStorage = data["passwordStorage"]
-        self.jsonExportData["passwordStorage"] = self.passwordStorage
-        self.passwordEncryption = data["passwordEncryption"]
-        self.jsonExportData["passwordEncryption"] = self.passwordEncryption
-        for tab in data["openTabs"]:
-            url = tab["url"]
-            self.jsonExportData["openTabs"].append({"url":url})
+        if os.path.isfile(self.profileFolder+self.openTabsFile):
+            with open(self.profileFolder+self.openTabsFile,'rb') as sharedFile:
+                jsonTabs = pickle.load(sharedFile)
+            data = json.loads(jsonTabs)
+            self.passwordStorage = data["passwordStorage"]
+            self.jsonExportData["passwordStorage"] = self.passwordStorage
+            self.passwordEncryption = data["passwordEncryption"]
+            self.jsonExportData["passwordEncryption"] = self.passwordEncryption
+            for tab in data["openTabs"]:
+                url = tab["url"]
+                self.jsonExportData["openTabs"].append({"url":url})
         
             
     #################################  PASSWORDS  #################################
