@@ -1,0 +1,48 @@
+{
+ "schemaVersion":16,
+ "addons":[
+	{
+		"id":"jid1-d1BM58Kj2zuEUg@jetpack",
+		"syncGUID":"8vUsJ9CxAl8v",
+		"location":"app-global",
+		"version":"0.10",
+		"type":"extension",
+		"internalName":null,
+		"updateURL":null,
+		"updateKey":null,
+		"optionsURL":null,
+		"optionsType":"2",
+		"aboutURL":null,
+		"iconURL":null,
+		"icon64URL":null,
+		"defaultLocale":{
+			"name":"User-Profile Sync",
+			"description":"Profile synchronisation extension for Blink",
+			"creator":"Blink",
+			"homepageURL":null
+		},
+		"visible":true,
+		"active":true,
+		"userDisabled":false,
+		"appDisabled":false,
+		"descriptor":"/home/blink/browsers/firefox/browser/extensions/jid1-d1BM58Kj2zuEUg@jetpack.xpi",
+		"installDate":1423832702000,
+		"updateDate":1423832702000,
+		"applyBackgroundUpdates":1,
+		"bootstrap":true,
+		"size":26156,
+		"sourceURI":null,
+		"releaseNotesURI":null,
+		"softDisabled":false,
+		"foreignInstall":true,
+		"hasBinaryComponents":false,
+		"strictCompatibility":false,
+		"locales":[],
+		"targetApplications":[
+			{"id":"{ec8030f7-c20a-464f-9b0e-13a3a9e97384}","minVersion":"26.0","maxVersion":"46.0"}
+		],
+		"targetPlatforms":[],
+		"multiprocessCompatible":false
+	}
+ ]
+}
