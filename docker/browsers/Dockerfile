@@ -1,10 +1,10 @@
-FROM progrium/busybox
+FROM gliderlabs/alpine:3.1
 
 WORKDIR /home/blink/browsers
 ADD /extensions /home/blink/browsers/extensions
 
 #wget
-RUN opkg-install bash wget bzip2
+RUN apk-install --update bash wget bzip2 binutils
 
 #Chrome
 RUN mkdir chrome
