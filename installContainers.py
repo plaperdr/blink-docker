@@ -28,13 +28,9 @@ def extractFile(file,path):
     print("Extraction of "+file+" complete")
     os.remove(file)
 
-def pullDockerImage(name):
-    print("Pulling "+name+" image from the Docker registry")
-    subprocess.call(["sudo","docker","pull",name])
-
 def buildDockerImage(name,path):
     print("Building Docker image "+name+" with "+path)
-    subprocess.call(["sudo","docker","build","-t",name,path])
+    subprocess.call(["sudo","docker","build","--pull","-t",name,path])
 
 def instantiateContainer(name):
     print("Running container "+name)
@@ -84,10 +80,6 @@ def main():
     if not os.path.isdir("plugins/ALL_PLUGINS"):
         downloadFile("plugins.zip")
         extractFile("plugins.zip","plugins")
-
-    #Download latest Docker images
-    pullDockerImage("fedora")
-    pullDockerImage("ubuntu")
 
     #Update Dockerfiles to include the right user/group ID
     updateGroupUserIDs()
