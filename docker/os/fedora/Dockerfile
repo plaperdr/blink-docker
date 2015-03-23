@@ -1,8 +1,8 @@
 FROM fedora:21
 
 RUN yum localinstall -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-RUN yum update -y 
-RUN yum install -y PackageKit-browser-plugin djview4-plugin esteid-browser-plugin freewrl-plugin gnash-plugin gnome-chemistry-utils-mozplugin gnome-shell gxine-mozplugin kopete kpartsplugin lightspark-mozilla-plugin mozplugger npapi-vlc npapi-vlc-gtk nspluginwrapper rhythmbox spice-xpi totem-mozplugin-vegas x2goplugin xine-plugin totem-mozplugin gecko-mediaplayer gnupg2 pinentry-gtk sudo python3 python3-numpy
+RUN yum update -y && yum clean all
+RUN yum install -y PackageKit-browser-plugin djview4-plugin esteid-browser-plugin freewrl-plugin gnash-plugin gnome-chemistry-utils-mozplugin gnome-shell gxine-mozplugin kopete kpartsplugin lightspark-mozilla-plugin mozplugger npapi-vlc npapi-vlc-gtk nspluginwrapper rhythmbox spice-xpi totem-mozplugin-vegas x2goplugin xine-plugin totem-mozplugin gecko-mediaplayer gnupg2 pinentry-gtk sudo python3 python3-numpy && yum clean all
 RUN wget http://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm 
 RUN yum install -y google-talkplugin_current_x86_64.rpm --nogpgcheck
 RUN mv /usr/lib64/mozilla/plugins /usr/lib64/mozilla/plugins.originals
