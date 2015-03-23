@@ -10,7 +10,7 @@ import subprocess
 import urllib.request
 
 osImages = ["blinkfed","blinkubu"]
-ubuntuName = "vivid"
+ubuntuName = "trusty"
 fedoraName = "fc21"
 
 def checkInstallation():
