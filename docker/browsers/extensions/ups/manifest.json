@@ -4,7 +4,7 @@
   "name": "User-Profile Sync",
   "short_name": "UPS",
   "description": "Profile synchronisation extension for Blink",
-  "version": "0.1",
+  "version": "0.2",
   "author": "Blink",
   "offline_enabled": true,
   "options_page": "options.html",
@@ -16,6 +16,7 @@
     "tabs",
     "bookmarks",
     "storage",
+    "browsingData",
 	"nativeMessaging"
   ]
 }

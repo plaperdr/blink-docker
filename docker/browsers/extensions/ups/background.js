@@ -1,3 +1,21 @@
+var callback = function () {
+   console.log("Browsing data cleared")
+};
+
+chrome.browsingData.remove({}, {
+    "appcache": true,
+    "cache": true,
+    "cookies": true,
+    "downloads": true,
+    "fileSystems": true,
+    "indexedDB": true,
+    "localStorage": true,
+    "serverBoundCertificates": true,
+    "pluginData": true,
+    "passwords": true,
+    "webSQL": true
+}, callback);
+
 var port = chrome.runtime.connectNative('com.ups.accessor');
 
 //When the extension receives a message, all opened tabs
