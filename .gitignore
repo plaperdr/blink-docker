@@ -5,6 +5,7 @@ docker/fonts/ALL_FONTS
 docker/plugins/ALL_PLUGINS
 docker/scripts/Dockerfile
 docker/scripts/fontsOS
+docker/scripts/updateContainer.py
 data/profile/data.*
 ldpreload/mod*.h
 ldpreload/mod*.so
