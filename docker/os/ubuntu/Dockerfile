@@ -27,5 +27,6 @@ RUN mkdir /home/blink/plugins/
 RUN sudo mv /usr/lib/mozilla/plugins/* /home/blink/plugins/
 
 ADD *.py /home/blink/
+ADD fontsOS/fontsUbuntu/* /usr/share/fonts/
 
 CMD sudo chown blink -R /home/blink && sudo chmod +x /home/blink/browsers/extensions/nativeApp/ups-host && python3 ~/mainContainer.py

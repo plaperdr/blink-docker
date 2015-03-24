@@ -77,9 +77,9 @@ def main():
     if not os.path.isdir("fonts/ALL_FONTS"):
         downloadFile("fonts.zip")
         extractFile("fonts.zip","fonts")
-    if not os.path.isdir("plugins/ALL_PLUGINS"):
-        downloadFile("plugins.zip")
-        extractFile("plugins.zip","plugins")
+    if not os.path.isdir("scripts/fontsOS"):
+        downloadFile("fontsOS.zip")
+        extractFile("fontsOS.zip","scripts/")
 
     #Update Dockerfiles to include the right user/group ID
     updateGroupUserIDs()
