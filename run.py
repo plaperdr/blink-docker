@@ -14,11 +14,11 @@ ubuntuName = "trusty"
 fedoraName = "fc21"
 
 def checkInstallation():
-    #Check the presence of the three main containers
+    #Check the presence of the two main containers
     #and the two main OS images
-    regExp = re.compile("Exited \(0\).*?blink(fonts|browsers|plugins).*?\\n")
+    regExp = re.compile("Exited \(0\).*?blink(fonts|browsers).*?\\n")
     output = subprocess.check_output(["sudo","docker","ps","-a"]).decode()
-    if len(regExp.findall(output)) != 3:
+    if len(regExp.findall(output)) != 2:
         sys.exit("Blink is not installed")
 
     output = subprocess.check_output(["sudo","docker","images"]).decode()
@@ -90,7 +90,6 @@ def main():
                     "-v "+profilePath+":/home/blink/profile " \
                     "-v "+ldpreloadPath+":/home/blink/ldpreload "\
                     "--volumes-from blinkbrowsers " \
-                    "--volumes-from blinkplugins " \
                     "--volumes-from blinkfonts "
     if len(sys.argv) == 2:
         chosenImage = sys.argv[1]

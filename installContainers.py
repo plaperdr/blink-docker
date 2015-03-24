@@ -96,8 +96,6 @@ def main():
     instantiateContainer("blinkbrowsers")
     buildDockerImage("blinkfonts","fonts/")
     instantiateContainer("blinkfonts")
-    buildDockerImage("blinkplugins","plugins/")
-    instantiateContainer("blinkplugins")
 
     print("Installation of Blink containers complete")
 

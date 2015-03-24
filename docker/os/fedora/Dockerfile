@@ -5,7 +5,6 @@ RUN yum update -y && yum clean all
 RUN yum install -y PackageKit-browser-plugin djview4-plugin esteid-browser-plugin freewrl-plugin gnash-plugin gnome-chemistry-utils-mozplugin gnome-shell gxine-mozplugin kopete kpartsplugin lightspark-mozilla-plugin mozplugger npapi-vlc npapi-vlc-gtk nspluginwrapper rhythmbox spice-xpi totem-mozplugin-vegas x2goplugin xine-plugin totem-mozplugin gecko-mediaplayer gnupg2 pinentry-gtk sudo python3 python3-numpy && yum clean all
 RUN wget http://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm 
 RUN yum install -y google-talkplugin_current_x86_64.rpm --nogpgcheck
-RUN mv /usr/lib64/mozilla/plugins /usr/lib64/mozilla/plugins.originals
 RUN ln -sf /usr/lib64/libudev.so.1 /usr/lib64/libudev.so.0
 
 # Replace 1000 with your user / group id
@@ -25,6 +24,8 @@ RUN mkdir /home/blink/ldpreload/
 RUN mkdir /home/blink/.fonts/
 RUN mkdir /home/blink/.mozilla/
 RUN mkdir /home/blink/.mozilla/plugins/
+RUN mkdir /home/blink/plugins/
+RUN sudo mv /usr/lib64/mozilla/plugins/* /home/blink/plugins/
 
 ADD *.py /home/blink/
 
