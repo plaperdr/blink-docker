@@ -8,6 +8,7 @@ import random
 import datetime
 import subprocess
 import urllib.request
+from installContainers import buildDockerImage,instantiateContainer
 
 osImages = ["blinkfed","blinkubu"]
 ubuntuName = "trusty"
@@ -61,14 +62,8 @@ def generateLibrairies():
 
     print("LD Preload libraries generated")
 
-    #We write a file that indicates that the installation is complete
-    #This file contains the date of last generation
-    with open('installComplete', 'w') as f:
-            f.write(str(datetime.date.today().toordinal()))
-    print("installComplete file written")
-
-def updateContainers():
-    print("Start updating containers")
+def updateOS():
+    print("Start updating OS containers")
     updateFile = profilePath+"/update"
     #We write the "update" file to inform containers tu update
     subprocess.call(["touch",updateFile])
@@ -83,25 +78,74 @@ def updateContainers():
 
     #We remove the update file
     subprocess.call(["rm",updateFile])
-    print("Containers updated")
+    print("OS Containers updated")
+
+def updateBrowsers():
+    print("Start updating browsers")
+
+    #We remove the old browser container and image
+    subprocess.call(["sudo","docker","rm","blinkbrowsers"])
+    subprocess.call(["sudo","docker","rmi","blinkbrowsers"])
+
+    #We build the new image and instantiate it
+    buildDockerImage("blinkbrowsers","docker/browsers/")
+    instantiateContainer("blinkbrowsers")
+
+    print("Browsers updated")
+
+def writeInstallComplete(mode):
+    #######
+    # We write a file that indicates that the installation is complete
+    # Format of the install complete file
+    # data = "XXXX YYYY"
+    # data[0] = "XXXX" -> days since the last update of OS containers
+    # data[1] = "YYYY" -> days since the last update of browsers
+    #######
+
+    data = []
+
+    if mode < 2:
+        #We read the current installComplete file
+        with open('installComplete', 'r') as f:
+            data = f.read().strip().split(" ")
+        #We update either the first or second counter
+        data[mode] = datetime.date.today().toordinal()
+    elif mode == 2:
+        # We update both counters
+        #(in the case of a fresh install)
+        nowDate = datetime.date.today().toordinal()
+        data = [nowDate,nowDate]
+
+    if len(data) == 2:
+        with open('installComplete', 'w') as f:
+            f.write("{} {}".format(data[0],data[1]))
+    print("installComplete file written")
 
 def main():
 
     if not os.path.isfile("installComplete"):
         checkInstallation()
+        writeInstallComplete(2)
         print("Installation verified")
     else:
         #We check if the "LD preload" libraries have been compiled in the last 30 days
         #If not, we retrieve the latest version online and recompile the libraries
         with open('installComplete', 'r') as f:
-            data = f.read()
-        pastDate = datetime.date.fromordinal(int(data))
+            data = f.read().strip().split(" ")
+        pastOSDate = datetime.date.fromordinal(int(data[0]))
+        pastBrowsersDate = datetime.date.fromordinal(int(data[1]))
         nowDate = datetime.date.today()
-        days = (nowDate-pastDate).days
-        print("Days since last library regeneration : {}".format(days))
-        if days > 15:
-            updateContainers()
+        OSDays = (nowDate-pastOSDate).days
+        browsersDays = (nowDate-pastBrowsersDate).days
+        print("Days since last OS update : {}".format(OSDays))
+        print("Days since last browsers update : {}".format(browsersDays))
+        if OSDays > 15:
+            updateOS()
             generateLibrairies()
+            writeInstallComplete(0)
+        if browsersDays > 45:
+            writeInstallComplete(1)
+            updateBrowsers()
 
     print("Launching Blink browsing environment")
     launchCommand = "sudo docker run -ti --rm -e DISPLAY " \
