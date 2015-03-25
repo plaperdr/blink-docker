@@ -9,4 +9,4 @@ docker/scripts/updateContainer.py
 data/profile/data.*
 ldpreload/mod*.h
 ldpreload/mod*.so
-
+__pycache__
