@@ -13,6 +13,10 @@ osImages = ["blinkfed","blinkubu"]
 ubuntuName = "trusty"
 fedoraName = "fc21"
 
+downloadsPath =  os.path.abspath("data/downloads")
+profilePath = os.path.abspath("data/profile")
+ldpreloadPath = os.path.abspath("ldpreload")
+
 def checkInstallation():
     #Check the presence of the two main containers
     #and the two main OS images
@@ -63,6 +67,24 @@ def generateLibrairies():
             f.write(str(datetime.date.today().toordinal()))
     print("installComplete file written")
 
+def updateContainers():
+    print("Start updating containers")
+    updateFile = profilePath+"/update"
+    #We write the "update" file to inform containers tu update
+    subprocess.call(["touch",updateFile])
+
+    #We run the update script in each container
+    #to update packages and plugins
+    for image in osImages:
+        subprocess.call(["sudo","docker","run","-it","-v",profilePath+":/home/blink/profile","--volumes-from","blinkbrowsers",image])
+        dockerID = subprocess.check_output(["sudo","docker","ps","-l","-q"])
+        subprocess.call(["sudo","docker","commit",dockerID.decode().strip(),image])
+        print("Update of "+image+" complete")
+
+    #We remove the update file
+    subprocess.call(["rm",updateFile])
+    print("Containers updated")
+
 def main():
 
     if not os.path.isfile("installComplete"):
@@ -77,13 +99,11 @@ def main():
         nowDate = datetime.date.today()
         days = (nowDate-pastDate).days
         print("Days since last library regeneration : {}".format(days))
-        if days > 30:
+        if days > 15:
+            updateContainers()
             generateLibrairies()
 
     print("Launching Blink browsing environment")
-    downloadsPath =  os.path.abspath("data/downloads")
-    profilePath = os.path.abspath("data/profile")
-    ldpreloadPath = os.path.abspath("ldpreload")
     launchCommand = "sudo docker run -ti --rm -e DISPLAY " \
                     "-v /tmp/.X11-unix:/tmp/.X11-unix " \
                     "-v "+downloadsPath+":/home/blink/Downloads " \

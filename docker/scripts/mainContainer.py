@@ -22,6 +22,7 @@ class Container(object):
     profileFolder = homeFolder+'profile/'
     dataFile = profileFolder+'data.json'
     encryptedDataFile = dataFile+".gpg"
+    updateFile = profileFolder+"update"
 
     destFontsFolder = '/home/blink/.fonts/'
     destPluginsFolder = '/home/blink/.mozilla/plugins/'
@@ -123,67 +124,56 @@ def main():
     #Change the working directory to the Shared folder
     os.chdir(Container.homeFolder)
 
-    #We create an instance of Container
-    blink = Container()
-
-    #We check the Data file with the complete user profile
-    blink.checkDataFile()
-
-    #We chose the fonts and the plugins
-    blink.selectFonts()
-    blink.selectPlugins()
-
-    if blink.selectBrowser() == 'chrome':
-        browser = Chrome()
+    if os.path.isfile(Container.updateFile):
+        #We update the container
+        subprocess.call(["python3","/home/blink/updateContainer.py"])
     else :
-        browser = Firefox()
-    #We import the user profile inside the browser
-    browser.importData()
+        #We create an instance of Container
+        blink = Container()
 
-    #We initialise a boolean to indicate if the
-    #VM must be shutdown
-    shutdown = False
+        #We check the Data file with the complete user profile
+        blink.checkDataFile()
 
-    while not shutdown :
-        #We launch the browser
-        browserProcess = browser.runBrowser()
+        #We chose the fonts and the plugins
+        blink.selectFonts()
+        blink.selectPlugins()
 
-        #We wait for either the browsing session to be finished
-        while not isinstance(browserProcess.poll(),int):
-            time.sleep(10)
+        if blink.selectBrowser() == 'chrome':
+            browser = Chrome()
+        else :
+            browser = Firefox()
+        #We import the user profile inside the browser
+        browser.importData()
 
-        encryption = browser.exportData()
+        #We initialise a boolean to indicate if the
+        #VM must be shutdown
+        shutdown = False
 
-        #Encrypt file if the encryption is activated
-        if encryption :
-            done = False
-            while not done :
-                res = subprocess.getstatusoutput("gpg2 -c --cipher-algo=AES256 "+Container.dataFile)
-                if res[0] == 0 :
-                    #If the encryption went well, we removed the unencrypted file
-                    subprocess.call("rm "+Container.dataFile,shell=True)
-                    done = True
-                elif "cancelled" in res[1]:
-                    #If the user cancelled the encryption operation, we do nothing
-                    done = True
+        while not shutdown :
+            #We launch the browser
+            browserProcess = browser.runBrowser()
 
+            #We wait for either the browsing session to be finished
+            while not isinstance(browserProcess.poll(),int):
+                time.sleep(10)
 
-        #We write a file to signal the host to shutdown all running VMs
-        #subprocess.call("touch "+VM.sharedFolder+"VM.shutdown", shell=True)
+            encryption = browser.exportData()
 
-        #We finish the execution of the script
-        shutdown = True
+            #Encrypt file if the encryption is activated
+            if encryption :
+                done = False
+                while not done :
+                    res = subprocess.getstatusoutput("gpg2 -c --cipher-algo=AES256 "+Container.dataFile)
+                    if res[0] == 0 :
+                        #If the encryption went well, we removed the unencrypted file
+                        subprocess.call("rm "+Container.dataFile,shell=True)
+                        done = True
+                    elif "cancelled" in res[1]:
+                        #If the user cancelled the encryption operation, we do nothing
+                        done = True
 
-        #else :
-        #We terminate the browser process
-        #browserProcess.kill()
-
-        #We switch the list of plugins and fonts
-        #machine.selectFonts()
-        #machine.selectPlugins()
-        #We remove the "browser.switch" file
-        #subprocess.call("rm "+VM.sharedFolder+"browser.switch",shell=True)
-
+            #We finish the execution of the script
+            shutdown = True
 
 if __name__ == "__main__":
     main()

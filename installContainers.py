@@ -86,8 +86,10 @@ def main():
 
     #Build OS images
     shutil.copyfile("os/fedora/Dockerfile","scripts/Dockerfile")
+    shutil.copyfile("os/fedora/updateContainer.py","scripts/updateContainer.py")
     buildDockerImage("blinkfed","scripts/")
     shutil.copyfile("os/ubuntu/Dockerfile","scripts/Dockerfile")
+    shutil.copyfile("os/ubuntu/updateContainer.py","scripts/updateContainer.py")
     buildDockerImage("blinkubu","scripts/")
 
     #Build plugins/fonts/browsers images
