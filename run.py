@@ -44,7 +44,7 @@ def generateLibrairies():
     fedKernel = re.search("kernel-(.{1,20}"+fedoraName+")((?!testing).)*?stable",str(fedSource)).group(1)+".x86_64"
     #We write the header file
     with open('ldpreload/modUname.h', 'w') as f:
-            f.write("#define RELEASE \""+fedKernel+"\"")
+        f.write("#define RELEASE \""+fedKernel+"\"")
     #We compile the library
     subprocess.call(["gcc","-Wall","-fPIC","-shared","-o","ldpreload/modFedUname.so","ldpreload/modUname.c"])
 
@@ -56,7 +56,7 @@ def generateLibrairies():
     ubuKernel = re.search("linux-image-(.*?)\">",str(ubuSource)).group(1)
     #We write the header file
     with open('ldpreload/modUname.h', 'w') as f:
-            f.write("#define RELEASE \""+ubuKernel+"\"")
+        f.write("#define RELEASE \""+ubuKernel+"\"")
     #We compile the library
     subprocess.call(["gcc","-Wall","-fPIC","-shared","-o","ldpreload/modUbuUname.so","ldpreload/modUname.c"])
 
