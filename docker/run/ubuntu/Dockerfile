@@ -1,7 +1,7 @@
 FROM blinkubuorig
 
 # Replace 1000 with your user / group id
-RUN export uid=201998 gid=200122 && \
+RUN export uid=1000 gid=1000 && \
     echo "blink:x:${uid}:${gid}:Blink,,,:/home/blink:/bin/bash" >> /etc/passwd && \
     echo "blink:x:${uid}:" >> /etc/group && \
     echo "blink ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/blink && \
