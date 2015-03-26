@@ -7,27 +7,13 @@ RUN wget http://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm
 RUN yum install -y google-talkplugin_current_x86_64.rpm --nogpgcheck
 RUN ln -sf /usr/lib64/libudev.so.1 /usr/lib64/libudev.so.0
 
-# Replace 1000 with your user / group id
-RUN export uid=1000 gid=1000 && \
-    mkdir -p /home/blink && \
-    echo "blink:x:${uid}:${gid}:Blink,,,:/home/blink:/bin/bash" >> /etc/passwd && \
-    echo "blink:x:${uid}:" >> /etc/group && \
-    echo "blink ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/blink && \
-    chmod 0440 /etc/sudoers.d/blink && \
-    chown ${uid}:${gid} -R /home/blink
-
-USER blink
-ENV HOME /home/blink
-
-RUN mkdir /home/blink/profile/
+RUN mkdir -p /home/blink/profile/
 RUN mkdir /home/blink/ldpreload/
 RUN mkdir /home/blink/.fonts/
-RUN mkdir /home/blink/.mozilla/
-RUN mkdir /home/blink/.mozilla/plugins/
+RUN mkdir -p /home/blink/.mozilla/plugins/
 RUN mkdir /home/blink/plugins/
-RUN sudo mv /usr/lib64/mozilla/plugins/* /home/blink/plugins/
+RUN mv /usr/lib64/mozilla/plugins/* /home/blink/plugins/
 
-ADD fontsOS/fontsFedora/* /usr/share/fonts/
-ADD *.py /home/blink/
-
-CMD sudo chown blink -R /home/blink && sudo chmod +x /home/blink/browsers/extensions/nativeApp/ups-host && python3 ~/mainContainer.py
+RUN yum install -y tar && wget http://amiunique.irisa.fr/fontsFedora.tar.gz && tar -C /usr/share/fonts/ -xf fontsFedora.tar.gz && rm fontsFedora.tar.gz
+ADD ubuntu/scripts/*.py /home/blink/
+ADD updateContainer.py /home/blink/
