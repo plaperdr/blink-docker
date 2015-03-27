@@ -25,6 +25,10 @@ def main():
     buildDockerImage("blinkfed","run/fedora/")
     buildDockerImage("blinkubu","run/ubuntu/")
 
+    #Instantiate containers
+    instantiateContainer("blinkbrowsers")
+    instantiateContainer("blinkfonts")
+
     print("Installation of Blink containers complete")
 
 if __name__ == "__main__":

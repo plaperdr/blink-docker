@@ -5,6 +5,8 @@ import subprocess
 import urllib.request
 from urllib.error import URLError
 
+prefixRepo = "plaperdr/"
+
 def downloadFile(file):
     try:
         print("Downloading "+file+"...")
@@ -25,11 +27,11 @@ def extractFile(file,path):
 
 def pullDockerImage(name):
     print("Pulling Docker image "+name)
-    subprocess.call(["sudo","docker","pull"])
+    subprocess.call(["sudo","docker","pull",prefixRepo+name])
 
 def buildDockerImage(name,path):
     print("Building Docker image "+name+" with "+path)
-    subprocess.call(["sudo","docker","build","--pull","-t",name,path])
+    subprocess.call(["sudo","docker","build","--pull","-t",prefixRepo+name,path])
 
 def buildDockerImageNoPull(name,path):
     print("Building Docker image "+name+" with "+path)
@@ -37,7 +39,7 @@ def buildDockerImageNoPull(name,path):
 
 def instantiateContainer(name):
     print("Running container "+name)
-    subprocess.call(["sudo","docker","run","--name",name,name])
+    subprocess.call(["sudo","docker","run","--name",name,prefixRepo+name])
 
 def updateGroupUserIDs():
     #Get user ID
