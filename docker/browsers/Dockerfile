@@ -1,4 +1,4 @@
-FROM gliderlabs/alpine:3.1
+FROM alpine:latest
 
 WORKDIR /home/blink/browsers
 ADD /extensions /home/blink/browsers/extensions
