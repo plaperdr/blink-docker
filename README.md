@@ -17,6 +17,14 @@ For Ubuntu: [Link](https://docs.docker.com/installation/ubuntulinux/)
 
 It is recommended to have at least **6GB** of free hard drive space to install every Blink components.
 
+### Quick install ###
+If you want to try Blink, here are 4 simple commands to get it running:
+```
+git clone https://github.com/plaperdr/blink-docker.git
+cd blink-docker/
+python3 downloadFromHub.py
+python3 run.py
+```
 ### Installation ###
 Run the **installContainers.py** script to build Blink from scratch. The process can take some time depending on your internet connection (download of packages, fonts and plugins).
 You can also run the **downloadFromHub.py** script to download the main images directly from Docker Hub.
