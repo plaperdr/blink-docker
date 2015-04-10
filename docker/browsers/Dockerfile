@@ -3,8 +3,8 @@ FROM alpine:latest
 WORKDIR /home/blink/browsers
 ADD /extensions /home/blink/browsers/extensions
 
-#wget
-RUN apk-install --update bash wget bzip2 binutils
+#Alpine packages
+RUN apk add --update bash wget bzip2 binutils && rm -rf /var/cache/apk/*
 
 #Chrome
 RUN mkdir chrome
