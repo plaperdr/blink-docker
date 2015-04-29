@@ -5,6 +5,7 @@ import os
 import json
 import pickle
 import subprocess
+import codecs
 from pprint import pprint
 from subprocess import CalledProcessError
 from browser import Browser,utils
@@ -35,6 +36,7 @@ class Chrome(Browser):
                       "browser":"Chrome"}
         
         if os.path.isfile(self.dataPath):
+            print(self.dataPath)
             self.jsonImportData = utils.readJSONDataFile(self.dataPath)
             self.passwordStorage = self.jsonImportData["passwordStorage"]
             self.passwordEncryption = self.jsonImportData["passwordEncryption"]
@@ -57,7 +59,7 @@ class Chrome(Browser):
             
     def runBrowser(self):
         chromePath = self.find("chrome","./browsers/chrome/")
-        return subprocess.Popen(chromePath+" --password-store=basic --no-sandbox --load-extension=/home/blink/browsers/extensions/ups/ --no-default-browser-check --no-first-run",shell=True)
+        return subprocess.Popen(chromePath+" --password-store=basic --load-extension=/home/blink/browsers/extensions/ups/ --no-default-browser-check --no-first-run",shell=True)
     
         
     #################################  BOOKMARKS  #################################
@@ -83,10 +85,12 @@ class Chrome(Browser):
         
     def exportBookmarks(self):
         if os.path.isfile(self.profileFolder+self.bookmarksFile):
-            with open(self.profileFolder+self.bookmarksFile, 'r') as chromeBookmarks:
-                chromeJsonData = json.load(chromeBookmarks)
+            with codecs.open(self.profileFolder+self.bookmarksFile, 'r', encoding='utf-8') as chromeBookmarks:
+                t = chromeBookmarks.read()
+                chromeJsonData = json.loads(t)
             self.jsonExportData["bookmarks"][0]["children"] = chromeJsonData["roots"]["bookmark_bar"]["children"]
             self.jsonExportData["bookmarks"][1]["children"] = chromeJsonData["roots"]["other"]["children"]
+            
     
     #################################  OPEN TABS  #################################
     def importOpenTabs(self):
@@ -162,4 +166,3 @@ class Chrome(Browser):
         self.exportPasswords()
         utils.writeJSONDataFile(self.jsonExportData, self.dataPath)
         return self.jsonExportData["passwordEncryption"]
-

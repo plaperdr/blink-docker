@@ -89,7 +89,7 @@ class Container(object):
     def selectBrowser():
         browsersList = os.listdir(Container.allBrowsersFolder)
         browsersList.remove("extensions")
-        return browsersList[random.randint(0,len(browsersList)-1)]
+        return 'chrome'
 
     ### Check existence of data file
     # If the file does not exist, it is created
@@ -119,7 +119,7 @@ class Container(object):
 
 ############### Main
 def main():
-    print("Blink Container Main script")
+    print("Blink Container Main script2")
 
     #Change the working directory to the Shared folder
     os.chdir(Container.homeFolder)
@@ -138,10 +138,10 @@ def main():
         blink.selectFonts()
         blink.selectPlugins()
 
-        if blink.selectBrowser() == 'chrome':
-            browser = Chrome()
-        else :
-            browser = Firefox()
+#        if blink.selectBrowser() == 'chrome':
+        browser = Chrome()
+#        else :
+#            browser = Firefox()
         #We import the user profile inside the browser
         browser.importData()
 
@@ -155,7 +155,7 @@ def main():
 
             #We wait for either the browsing session to be finished
             while not isinstance(browserProcess.poll(),int):
-                time.sleep(10)
+                time.sleep(1)
 
             encryption = browser.exportData()
 

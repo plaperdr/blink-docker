@@ -11,4 +11,4 @@ RUN export uid=1000 gid=1000 && \
 USER blink
 ENV HOME /home/blink
 
-CMD sudo chown blink -R /home/blink && sudo chmod +x /home/blink/browsers/extensions/nativeApp/ups-host && python3 ~/mainContainer.py
+CMD sudo chown blink -R /home/blink && sudo chmod +x /home/blink/browsers/extensions/nativeApp/ups-host && /bin/bash
