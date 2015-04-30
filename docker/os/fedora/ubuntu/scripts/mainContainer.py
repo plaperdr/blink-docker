@@ -155,7 +155,7 @@ def main():
 
             #We wait for either the browsing session to be finished
             while not isinstance(browserProcess.poll(),int):
-                time.sleep(10)
+                time.sleep(1)
 
             encryption = browser.exportData()
 
