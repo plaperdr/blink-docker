@@ -10,3 +10,4 @@ data/profile/data.*
 ldpreload/mod*.h
 ldpreload/mod*.so
 __pycache__
+runTests.py
