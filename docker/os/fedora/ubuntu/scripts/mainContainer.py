@@ -155,12 +155,14 @@ def main():
 
         #We chose the fonts and the plugins
         blink.selectFonts()
-        blink.selectPlugins()
 
+        #We chose the plugins only if it is Firefox
         if blink.selectBrowser() == 'chrome':
             browser = Chrome()
         else :
+            blink.selectPlugins()
             browser = Firefox()
+            
         #We import the user profile inside the browser
         browser.importData()
 
