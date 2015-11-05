@@ -14,8 +14,8 @@ def main():
         sys.exit("Docker not installed. Install Docker to process with the installation.")
 
     #Build OS images
-    buildDockerImage("blinkfedorig","os/fedora/")
-    buildDockerImage("blinkubuorig","os/fedora/ubuntu")
+    buildDockerImage("blinkfedorig","os/fedora/",True)
+    buildDockerImage("blinkubuorig","os/fedora/ubuntu",True)
 
     #Update Dockerfiles to include the right user/group ID
     #And build the final OS images
@@ -25,9 +25,9 @@ def main():
 
     #Build plugins/fonts/browsers images
     #and instantiate containers
-    buildDockerImage("blinkbrowsers","browsers/")
+    buildDockerImage("blinkbrowsers","browsers/",True)
     instantiateContainer("blinkbrowsers")
-    buildDockerImage("blinkfonts","fonts/")
+    buildDockerImage("blinkfonts","fonts/",True)
     instantiateContainer("blinkfonts")
 
     print("Installation of Blink containers complete")
