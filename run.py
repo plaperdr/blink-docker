@@ -8,7 +8,7 @@ import random
 import datetime
 import subprocess
 import urllib.request
-from installContainers import buildDockerImage,instantiateContainer
+from installContainers import buildDockerImageLocal,instantiateContainer
 from installUtils import prefixRepoLocal,prefixRepoHub
 
 osImages = ["blinkfed","blinkubu"]
@@ -89,7 +89,7 @@ def updateBrowsers():
     subprocess.call(["sudo","docker","rmi","blinkbrowsers"])
 
     #We build the new image and instantiate it
-    buildDockerImage("blinkbrowsers","docker/browsers/",True)
+    buildDockerImageLocal("blinkbrowsers","docker/browsers/")
     instantiateContainer("blinkbrowsers")
 
     print("Browsers updated")
