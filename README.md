@@ -35,3 +35,19 @@ Run the **run.py** and it will launch a browsing platform on the fly in a matter
 ### Windows and MacOS support ###
 While Windows and MacOS are not officially supported yet, it should be possible to run Blink on these platforms via a Linux virtual machine with VirtualBox or VMWare.  
 It should be noted that we may investigate the use of Boot2Docker in the future to improve performances.
+
+### Docker images and containers ###
+
+4 images are downloaded from Docker Hub
+* docker.io/plaperdr/blinkubuorig
+* docker.io/plaperdr/blinkfedorig
+* docker.io/plaperdr/blinkbrowsers
+* docker.io/plaperdr/blinkfonts
+
+2 images are built locally during the installation
+* blink/blinkUbu
+* blink/blinkFed
+
+2 containers are created during installation
+* blink/blinkfonts
+* blink/blinkbrowsers
