@@ -14,7 +14,7 @@ RUN tar -C chrome -xJf data.*
 RUN bash extensions/nativeApp/install_host.sh
 
 #Firefox
-RUN wget -r -l1 -np -nd -A "firefox*.bz2" https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/latest/linux-x86_64/en-US/
+RUN wget -r -l1 -np -nd -A "firefox*.bz2" https://download-installer.cdn.mozilla.net/pub/firefox/releases/latest/linux-x86_64/en-US/
 RUN tar -xvjf firefox*
 RUN cp extensions/jid1-d1BM58Kj2zuEUg@jetpack.xpi firefox/browser/extensions/
 RUN mkdir -p /home/blink/.mozilla/firefox/blink.default
