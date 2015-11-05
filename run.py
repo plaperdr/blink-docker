@@ -9,7 +9,7 @@ import datetime
 import subprocess
 import urllib.request
 from installContainers import buildDockerImage,instantiateContainer
-from installUtils import prefixRepoLocal,prefixRepoHub
+from installUtils import prefixRepoHub
 
 osImages = ["blinkfed","blinkubu"]
 ubuntuName = "trusty"
@@ -154,8 +154,8 @@ def main():
                     "-v "+downloadsPath+":/home/blink/Downloads " \
                     "-v "+profilePath+":/home/blink/profile " \
                     "-v "+ldpreloadPath+":/home/blink/ldpreload " \
-                    "--volumes-from "+prefixRepoLocal+"blinkbrowsers " \
-                    "--volumes-from "+prefixRepoLocal+"blinkfonts "+prefixRepoHub
+                    "--volumes-from blinkbrowsers " \
+                    "--volumes-from blinkfonts "+prefixRepoHub
 
     if len(sys.argv) == 2:
         chosenImage = sys.argv[1]
