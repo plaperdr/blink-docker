@@ -7,8 +7,10 @@ import subprocess
 import numpy
 import utils
 import time
+import csv
 from chrome import Chrome
 from firefox import Firefox
+from rws import *
 
 ############### Container Class
 class Container(object):
@@ -23,33 +25,26 @@ class Container(object):
     dataFile = profileFolder+'data.json'
     encryptedDataFile = dataFile+".gpg"
     updateFile = profileFolder+"update"
+    fontsCSVFile = homeFolder+'fontsWeightBlink.csv'
+    pluginsCSVFile = homeFolder+'pluginsWeightBlink.csv'
 
     destFontsFolder = '/home/blink/.fonts/'
     destPluginsFolder = '/home/blink/.mozilla/plugins/'
 
-    averageNbFonts = 261.0094
-    sdFonts = 91.45935
-    averageNbPlugins = 12.6303
-    sdPlugins = 5.7451
+    #Numbers updated (29th October) from Linux FPs
+    averageNbFonts = 155.556
+    sdFonts = 127.488
+    averageNbPlugins = 4.297
+    sdPlugins = 3.269
 
     ### Init
     def __init__(self):
 
         #List of plugins
-        self.userP = []
-        self.pluginsList = []
-        self.userPlugins = []
-        for root, dirs, files in os.walk(Container.allPluginsFolder):
-            for file in files:
-                self.pluginsList.append(os.path.abspath(os.path.join(root, file)))
-                if file in self.userP :
-                    self.userPlugins.append(os.path.abspath(os.path.join(root, file)))
+        self.pluginsList = Container.readCsvFile(Container.pluginsCSVFile)
 
         #List of fonts
-        self.fontsList = []
-        for root, dirs, files in os.walk(Container.allFontsFolder):
-            for file in files:
-                self.fontsList.append(os.path.abspath(os.path.join(root, file)))
+        self.fontsList = Container.readCsvFile(Container.fontsCSVFile)
 
     ### PLUGINS
     def selectPlugins(self):
@@ -57,19 +52,19 @@ class Container(object):
         while nbRandomPlugins < 1 :
             nbRandomPlugins = int(numpy.random.normal(loc=Container.averageNbPlugins,scale=Container.sdPlugins))
 
-        randomPluginsList = [file for file in self.pluginsList if file not in self.userPlugins]
-        finalPluginsList = list(self.userPlugins)
-        if nbRandomPlugins > len(randomPluginsList):
-            finalPluginsList = list(self.pluginsList)
-        else :
-            finalPluginsList.extend(random.sample(randomPluginsList,nbRandomPlugins))
+        pluginsRWS = RWS(self.pluginsList)
+
+        #We chose randomly nbRandomPlugins plugins
+        chosenPlugins = pluginsRWS.getRandomItems(nbRandomPlugins)
+        #We take the file name and append the path of the All plugins folder
+        chosenPlugins = [Container.allPluginsFolder+plugin for plugin in chosenPlugins]
 
         #We remove old mozilla files to be sure to correctly load plugins
         subprocess.call("find ~/.mozilla -name pluginreg.dat -type f -exec rm {} \;", shell=True)
 
         #We remove the old plugins and copy the new ones
         subprocess.call("rm -rf "+Container.destPluginsFolder+"*",shell=True)
-        for plugin in finalPluginsList:
+        for plugin in chosenPlugins:
             subprocess.call(["cp",plugin,Container.destPluginsFolder])
 
     ### FONTS
@@ -77,11 +72,17 @@ class Container(object):
         nbRandomFonts = int(numpy.random.normal(loc=Container.averageNbFonts,scale=Container.sdFonts))
         while nbRandomFonts < 1:
             nbRandomFonts = int(numpy.random.normal(loc=Container.averageNbFonts,scale=Container.sdFonts))
-        finalFontsList = random.sample(self.fontsList,nbRandomFonts)
+
+        fontsRWS = RWS(self.fontsList)
+
+        #We chose randomly nbRandomFonts fonts
+        chosenFonts = fontsRWS.getRandomItems(nbRandomFonts)
+        #We take the file name and append the path of the All plugins folder
+        chosenFonts = [Container.allFontsFolder+font for font in chosenFonts]
 
         #We remove the old fonts, recreate the link to the user fonts and copy the new ones
         subprocess.call("rm -rf "+Container.destFontsFolder+"*",shell=True)
-        for font in finalFontsList:
+        for font in chosenFonts:
             subprocess.call(["cp",font,Container.destFontsFolder])
 
     ### BROWSERS
@@ -115,6 +116,24 @@ class Container(object):
                         "passwordEncryption":"false",
                         "browser":"Firefox"}
             utils.writeJSONDataFile(jsonData,Container.dataFile)
+
+    ### CSV FILE
+    # Import plugins/fonts weight from
+    # CSV file
+    @staticmethod
+    def readCsvFile(path):
+        #########
+        # Format
+        # 1 - Name of font/plugin
+        # 2 - Name of file
+        # 3 - Weight
+        #########
+        l = []
+        with open(path, newline='') as csvFile:
+            reader = csv.reader(csvFile, delimiter=',')
+            for row in reader:
+                l.append((row[0],row[1],int(row[2])))
+        return l
 
 
 ############### Main
