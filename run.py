@@ -9,6 +9,7 @@ import datetime
 import subprocess
 import urllib.request
 from installContainers import buildDockerImage,instantiateContainer
+from installUtils import prefixRepoLocal,prefixRepoHub
 
 osImages = ["blinkfed","blinkubu"]
 ubuntuName = "trusty"
@@ -88,7 +89,7 @@ def updateBrowsers():
     subprocess.call(["sudo","docker","rmi","blinkbrowsers"])
 
     #We build the new image and instantiate it
-    buildDockerImage("blinkbrowsers","docker/browsers/")
+    buildDockerImage("blinkbrowsers","docker/browsers/",True)
     instantiateContainer("blinkbrowsers")
 
     print("Browsers updated")
@@ -152,9 +153,10 @@ def main():
                     "-v /tmp/.X11-unix:/tmp/.X11-unix " \
                     "-v "+downloadsPath+":/home/blink/Downloads " \
                     "-v "+profilePath+":/home/blink/profile " \
-                    "-v "+ldpreloadPath+":/home/blink/ldpreload "\
-                    "--volumes-from blinkbrowsers " \
-                    "--volumes-from blinkfonts "
+                    "-v "+ldpreloadPath+":/home/blink/ldpreload " \
+                    "--volumes-from "+prefixRepoLocal+"blinkbrowsers " \
+                    "--volumes-from "+prefixRepoLocal+"blinkfonts "+prefixRepoHub
+
     if len(sys.argv) == 2:
         chosenImage = sys.argv[1]
     else :

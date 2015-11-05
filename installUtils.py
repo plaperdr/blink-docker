@@ -5,7 +5,8 @@ import subprocess
 import urllib.request
 from urllib.error import URLError
 
-prefixRepo = "plaperdr/"
+prefixRepoHub = "docker.io/plaperdr/"
+prefixRepoLocal = "blink/"
 
 def downloadFile(file):
     try:
@@ -27,19 +28,22 @@ def extractFile(file,path):
 
 def pullDockerImage(name):
     print("Pulling Docker image "+name)
-    subprocess.call(["sudo","docker","pull",prefixRepo+name])
+    subprocess.call(["sudo","docker","pull",prefixRepoHub+name])
 
-def buildDockerImage(name,path):
+def buildDockerImage(name,path,hub):
     print("Building Docker image "+name+" with "+path)
-    subprocess.call(["sudo","docker","build","--pull","-t",prefixRepo+name,path])
+    if hub:
+        subprocess.call(["sudo","docker","build","--pull","-t",prefixRepoHub+name,path])
+    else:
+        subprocess.call(["sudo","docker","build","--pull","-t",prefixRepoLocal+name,path])
 
 def buildDockerImageNoPull(name,path):
     print("Building Docker image "+name+" with "+path)
-    subprocess.call(["sudo","docker","build","-t",name,path])
+    subprocess.call(["sudo","docker","build","-t",prefixRepoLocal+name,path])
 
 def instantiateContainer(name):
     print("Running container "+name)
-    subprocess.call(["sudo","docker","run","--name",name,prefixRepo+name])
+    subprocess.call(["sudo","docker","run","--name",prefixRepoLocal+name,name])
 
 def updateGroupUserIDs():
     #Get user ID
