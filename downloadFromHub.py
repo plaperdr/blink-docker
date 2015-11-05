@@ -22,8 +22,8 @@ def main():
     #Update Dockerfiles to include the right user/group ID
     #And build the final OS images
     updateGroupUserIDs()
-    buildDockerImage("blinkfed","run/fedora/",False)
-    buildDockerImage("blinkubu","run/ubuntu/",False)
+    buildDockerImageLocal("blinkfed","run/fedora/")
+    buildDockerImageLocal("blinkubu","run/ubuntu/")
 
     #Instantiate containers
     instantiateContainer("blinkbrowsers")
