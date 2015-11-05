@@ -6,6 +6,7 @@ import urllib.request
 from urllib.error import URLError
 
 prefixRepoHub = "docker.io/plaperdr/"
+prefixRepoLocal = "blink/"
 
 def downloadFile(file):
     try:
@@ -29,16 +30,16 @@ def pullDockerImage(name):
     print("Pulling Docker image "+name)
     subprocess.call(["sudo","docker","pull",prefixRepoHub+name])
 
-def buildDockerImage(name,path,hub):
+def buildDockerImageHub(name,path):
     print("Building Docker image "+name+" with "+path)
-    if hub:
-        subprocess.call(["sudo","docker","build","--pull","-t",prefixRepoHub+name,path])
-    else:
-        subprocess.call(["sudo","docker","build","--pull","-t",name,path])
+    subprocess.call(["sudo","docker","build","--pull","-t",prefixRepoHub+name,path])
 
-def buildDockerImageNoPull(name,path):
+def buildDockerImageLocal(name,path):
+    subprocess.call(["sudo","docker","build","--pull","-t",prefixRepoLocal+name,path])
+
+def buildDockerImageNoPullLocal(name,path):
     print("Building Docker image "+name+" with "+path)
-    subprocess.call(["sudo","docker","build","-t",name,path])
+    subprocess.call(["sudo","docker","build","-t",prefixRepoLocal+name,path])
 
 def instantiateContainer(name):
     print("Running container "+name)

@@ -38,7 +38,7 @@ It should be noted that we may investigate the use of Boot2Docker in the future 
 
 ### Docker images and containers ###
 
-4 images are downloaded from Docker Hub
+4 images are downloaded from Docker Hub (or can be built from scratch)
 * docker.io/plaperdr/blinkubuorig
 * docker.io/plaperdr/blinkfedorig
 * docker.io/plaperdr/blinkbrowsers
@@ -49,5 +49,5 @@ It should be noted that we may investigate the use of Boot2Docker in the future 
 * blink/blinkFed
 
 2 containers are created during installation
-* blink/blinkfonts
-* blink/blinkbrowsers
+* blinkfonts
+* blinkbrowsers
