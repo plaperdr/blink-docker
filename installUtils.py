@@ -5,7 +5,7 @@ import subprocess
 import urllib.request
 from urllib.error import URLError
 
-prefixRepoHub = "docker.io/plaperdr/"
+prefixRepoHub = "plaperdr/"
 prefixRepoLocal = "blink/"
 
 def downloadFile(file):
