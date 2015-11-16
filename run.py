@@ -85,7 +85,7 @@ def updateBrowsers():
     print("Start updating browsers")
 
     #We remove the old browser container and image
-    subprocess.call(["sudo","docker","rm","blinkbrowsers"])
+    subprocess.call(["sudo","docker","rm","-v","blinkbrowsers"])
     subprocess.call(["sudo","docker","rmi","blinkbrowsers"])
 
     #We build the new image and instantiate it

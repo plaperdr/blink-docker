@@ -162,7 +162,7 @@ def main():
         else :
             blink.selectPlugins()
             browser = Firefox()
-            
+
         #We import the user profile inside the browser
         browser.importData()
 
