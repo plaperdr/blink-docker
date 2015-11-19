@@ -56,16 +56,14 @@ class Container(object):
 
         #We chose randomly nbRandomPlugins plugins
         chosenPlugins = pluginsRWS.getRandomItems(nbRandomPlugins)
-        #We take the file name and append the path of the All plugins folder
-        chosenPlugins = [Container.allPluginsFolder+plugin for plugin in chosenPlugins]
 
         #We remove old mozilla files to be sure to correctly load plugins
         subprocess.call("find ~/.mozilla -name pluginreg.dat -type f -exec rm {} \;", shell=True)
 
-        #We remove the old plugins and copy the new ones
+        #We remove the links to the old plugins and create symbolic links for the new ones
         subprocess.call("rm -rf "+Container.destPluginsFolder+"*",shell=True)
         for plugin in chosenPlugins:
-            subprocess.call(["cp",plugin,Container.destPluginsFolder])
+            subprocess.call(["ln","-s",Container.allPluginsFolder+plugin,Container.destPluginsFolder+plugin])
 
     ### FONTS
     def selectFonts(self):
@@ -77,13 +75,11 @@ class Container(object):
 
         #We chose randomly nbRandomFonts fonts
         chosenFonts = fontsRWS.getRandomItems(nbRandomFonts)
-        #We take the file name and append the path of the All plugins folder
-        chosenFonts = [Container.allFontsFolder+font for font in chosenFonts]
 
-        #We remove the old fonts, recreate the link to the user fonts and copy the new ones
+        #We create symbolic links for the new ones
         subprocess.call("rm -rf "+Container.destFontsFolder+"*",shell=True)
         for font in chosenFonts:
-            subprocess.call(["cp",font,Container.destFontsFolder])
+            subprocess.call(["ln","-s",Container.allFontsFolder+font,Container.destFontsFolder+font])
 
     ### BROWSERS
     @staticmethod
