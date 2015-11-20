@@ -5,6 +5,16 @@ from installUtils import *
 
 dockerImages = ["blinkfedorig","blinkubuorig","blinkfonts","blinkbrowsers"]
 
+def setupTorProxy():
+    #Pull the Tor proxy image
+    subprocess.call(["sudo","docker","pull","jess/tor-proxy"])
+
+    #Instantiate the container
+    subprocess.call(["sudo","docker","run","-d","--restart","always","-p","9050:9050","--name","torproxy","jess/tor-proxy"])
+
+    #Stop the container
+    subprocess.call(["sudo","docker","stop","torproxy"])
+
 def main():
     print("Blink Download script")
 
@@ -28,6 +38,9 @@ def main():
     #Instantiate containers
     instantiateContainer("blinkbrowsers")
     instantiateContainer("blinkfonts")
+
+    #Setup the Tor proxy container
+    setupTorProxy()
 
     print("Installation of Blink containers complete")
 

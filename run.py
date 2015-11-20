@@ -122,6 +122,12 @@ def writeInstallComplete(mode):
             f.write("{} {}".format(data[0],data[1]))
     print("installComplete file written")
 
+def startTorProxy():
+    subprocess.call(["sudo","docker","start","torproxy"])
+
+def stopTorProxy():
+    subprocess.call(["sudo","docker","stop","torproxy"])
+
 def main():
 
     if not os.path.isfile("installComplete"):
@@ -155,7 +161,8 @@ def main():
                     "-v "+profilePath+":/home/blink/profile " \
                     "-v "+ldpreloadPath+":/home/blink/ldpreload " \
                     "--volumes-from blinkbrowsers " \
-                    "--volumes-from blinkfonts "+prefixRepoLocal
+                    "--volumes-from blinkfonts " \
+                    "--net container:torproxy "+prefixRepoLocal
 
     if len(sys.argv) == 2:
         chosenImage = sys.argv[1]
@@ -168,8 +175,14 @@ def main():
     else:
         subprocess.call(["cp","-f","ldpreload/modUbuUname.so","ldpreload/modUname.so"])
 
+    #Start Tor proxy
+    startTorProxy()
+
     print("Image "+chosenImage+" chosen")
     subprocess.call(launchCommand+chosenImage,shell=True)
+
+    #When browsing is finished, we stop the Tor proxy container
+    stopTorProxy()
 
     print("End of script")
 
