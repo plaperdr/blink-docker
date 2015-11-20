@@ -37,7 +37,7 @@ port.onMessage.addListener(function(data) {
 	});
 	
 	//Open the new tabs
-	for(i=1 ; i< data["openTabs"].length ; i++){
+	for(var i=1 ; i< data["openTabs"].length ; i++){
 		chrome.tabs.create({"url": data["openTabs"][i].url});
 	}
   
@@ -89,4 +89,45 @@ function sendOpenTabs(){
 }
 
 
+//Management of Tor proxy
+function toggleTorProxy(){
+	chrome.browserAction.getTitle({},function(res){
+
+		if(res == "Tor disabled"){
+			//Enabling Tor proxy (use of SOCKS5 proxy)
+			var torConfig = {
+				mode: "fixed_servers",
+				rules: {
+					singleProxy: {
+						scheme: "socks5",
+						host: "localhost",
+						port: 9050
+					},
+					bypassList: ["localhost", "127.0.0.1"]
+				}
+			};
+			chrome.proxy.settings.set(
+					{value: torConfig, scope: 'regular'},
+					function() {
+						//Change icon and title
+						chrome.browserAction.setIcon({path:"imgs/tor-enabled-24.png"});
+						chrome.browserAction.setTitle({title:"Tor enabled"});
+					}
+			);
+		} else {
+			//Disabling Tor proxy
+			chrome.proxy.settings.clear(
+					{scope: 'regular'},
+					function() {
+						//Change icon and title
+						chrome.browserAction.setIcon({path:"imgs/tor-disabled-24.png"});
+						chrome.browserAction.setTitle({title:"Tor disabled"});
+					}
+			);
+
+		}
+	});
+}
+
+chrome.browserAction.onClicked.addListener(toggleTorProxy);
 
