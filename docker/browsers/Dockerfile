@@ -13,10 +13,10 @@ RUN ar vx google-chrome-stable_current_amd64.deb
 RUN tar -C chrome -xJf data.*
 RUN bash extensions/nativeApp/install_host.sh
 
-#Firefox
-RUN wget -O firefox.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US"
-RUN tar -xvjf firefox*
-RUN cp extensions/jid1-d1BM58Kj2zuEUg@jetpack.xpi firefox/browser/extensions/
+#Firefox (latest stable and latest ESR)
+RUN wget -O firefox.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US" && tar -xvjf firefox* && mv firefox firefox-latest && rm firefox.bz2
+RUN wget -O firefox.bz2 "https://download.mozilla.org/?product=firefox-esr-latest&os=linux64&lang=en-US" && tar -xvjf firefox* && mv firefox firefox-latest-esr && rm firefox.bz2
+RUN cp extensions/jid1-d1BM58Kj2zuEUg@jetpack.xpi firefox-latest/browser/extensions/ && cp extensions/jid1-d1BM58Kj2zuEUg@jetpack.xpi firefox-latest-esr/browser/extensions/
 RUN mkdir -p /home/blink/.mozilla/firefox/blink.default
 RUN cp extensions/extensions.json /home/blink/.mozilla/firefox/blink.default
 
