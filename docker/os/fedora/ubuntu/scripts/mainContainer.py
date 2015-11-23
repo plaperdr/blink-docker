@@ -8,9 +8,10 @@ import numpy
 import utils
 import time
 import csv
-from chrome import Chrome
-from firefox import Firefox
+from chrome import *
+from firefox import *
 from rws import *
+from browsersList import browsersList
 
 ############### Container Class
 class Container(object):
@@ -36,6 +37,15 @@ class Container(object):
     sdFonts = 127.488
     averageNbPlugins = 4.297
     sdPlugins = 3.269
+
+    #Browsers dictionary
+    browsersDict = {
+        'FirefoxRepo': FirefoxRepo,
+        'Firefox':Firefox,
+        'FirefoxESR':FirefoxESR,
+        'Chrome':Chrome,
+        'Chromium':Chromium
+    }
 
     ### Init
     def __init__(self):
@@ -84,9 +94,8 @@ class Container(object):
     ### BROWSERS
     @staticmethod
     def selectBrowser():
-        browsersList = os.listdir(Container.allBrowsersFolder)
-        browsersList.remove("extensions")
-        return browsersList[random.randint(0,len(browsersList)-1)]
+        #We chose a browser from the ones provided by each OS
+        return Container.browsersDict[browsersList[random.randint(0,len(browsersList)-1)]]()
 
     ### Check existence of data file
     # If the file does not exist, it is created
