@@ -18,5 +18,6 @@ RUN rm /usr/lib/mozilla/plugins/flash*.so && mv /usr/lib/mozilla/plugins/* /home
 RUN wget http://amiunique.irisa.fr/fontsUbuntu.tar.gz && tar -C /usr/share/fonts/ -xf fontsUbuntu.tar.gz && rm fontsUbuntu.tar.gz
 ADD scripts/*.py /home/blink/
 ADD updateContainer.py /home/blink/
+ADD browsersList.py /home/blink/
 ADD pluginsWeightBlink.csv /home/blink/
 ADD scripts/fontsWeightBlink.csv /home/blink/
