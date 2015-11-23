@@ -8,14 +8,15 @@ import subprocess
 from subprocess import CalledProcessError
 from browser import Browser,utils
 
-class Chrome(Browser):
+class ChromeBase(Browser):
     
-    def __init__(self):
+    def __init__(self,profileFolder,path):
         super().__init__()
         self.bookmarksFile = "Bookmarks"
         self.openTabsFile = "shared.pkl"
         self.passwordsFile = "Login\ Data"
-        self.profileFolder = utils.relativeToAbsoluteHomePath("~/.config/google-chrome/Default/")
+        self.profileFolder = profileFolder
+        self.chromePath = path
         
         jsonDataStructure = {"bookmarks":[{"name":"Bookmarks Toolbar",
                                     "children":[],
@@ -53,10 +54,9 @@ class Chrome(Browser):
         for root, dirs, files in os.walk(path):
             if name in files:
                 return os.path.join(root, name)
-            
+
     def runBrowser(self):
-        chromePath = self.find("chrome","./browsers/chrome/")
-        return subprocess.Popen(chromePath+" --password-store=basic --load-extension=/home/blink/browsers/extensions/ups/ --no-default-browser-check --no-first-run",shell=True)
+        return subprocess.Popen(self.chromePath+" --password-store=basic --load-extension=/home/blink/browsers/extensions/ups/ --no-default-browser-check --no-first-run",shell=True)
     
         
     #################################  BOOKMARKS  #################################
@@ -110,7 +110,7 @@ class Chrome(Browser):
             
     #################################  PASSWORDS  #################################
     def importPasswords(self):
-        subprocess.call("cp -f /home/blink/browsers/extensions/Login\ Data ~/.config/google-chrome/Default/Login\ Data",shell=True)
+        subprocess.call("cp -f /home/blink/browsers/extensions/Login\ Data "+self.profileFolder+"Login\ Data",shell=True)
         if self.jsonImportData["passwords"] != []:
             passwordsList = json.loads(json.dumps(self.jsonImportData["passwords"]))
                 
@@ -121,13 +121,13 @@ class Chrome(Browser):
                     commandValues += "1"
                 else :
                     commandValues += "0"
-                commandEnd = ",0,0,0,0);\" | sqlite3 ~/.config/google-chrome/Default/Login\ Data | grep -v '^|$'"
+                commandEnd = ",0,0,0,0);\" | sqlite3 "+self.profileFolder+"Login\ Data | grep -v '^|$'"
                 subprocess.call(commandStart+commandValues+commandEnd,shell=True)
             del passwordsList
         
     
     def exportPasswords(self):
-        selectCommand = "echo 'SELECT origin_url,username_value, password_value,action_url FROM logins;' | sqlite3 ~/.config/google-chrome/Default/Login\ Data | grep -v '^|$'"
+        selectCommand = "echo 'SELECT origin_url,username_value, password_value,action_url FROM logins;' | sqlite3 "+self.profileFolder+"Login\ Data | grep -v '^|$'"
         try :
             passwordsData = subprocess.check_output(selectCommand,shell=True)
             passwordsData = passwordsData.decode()
@@ -147,7 +147,7 @@ class Chrome(Browser):
         
     #################################  DATA  #################################
     def importData(self):
-        if os.path.isdir("/home/blink/.config/google-chrome/Default/"):
+        if os.path.isdir(self.profileFolder):
             print("Data import")
             self.importBookmarks()
             self.importOpenTabs()
@@ -161,3 +161,12 @@ class Chrome(Browser):
         self.exportPasswords()
         utils.writeJSONDataFile(self.jsonExportData, self.dataPath)
         return self.jsonExportData["passwordEncryption"]
+
+
+class Chrome(ChromeBase):
+    def __init__(self):
+        super().__init__("/home/blink/.config/google-chrome/Default/",ChromeBase.find("chrome","./browsers/chrome/"))
+
+class Chromium(ChromeBase):
+    def __init__(self):
+        super().__init__("/home/blink/.config/chromium/Default/","chromium-browser")
