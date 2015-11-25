@@ -21,4 +21,5 @@ VOLUME /home/blink/.mozilla/firefox
 VOLUME /home/blink/.config/google-chrome
 VOLUME /home/blink/.config/chromium
 VOLUME /etc/opt/chrome/
+VOLUME /etc/chromium
 CMD /bin/sh
