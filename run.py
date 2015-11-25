@@ -72,9 +72,9 @@ def updateOS():
     #We run the update script in each container
     #to update packages and plugins
     for image in osImages:
-        subprocess.call(["sudo","docker","run","-it","-v",profilePath+":/home/blink/profile","--volumes-from","blinkbrowsers",image])
+        subprocess.call(["sudo","docker","run","-it","-v",profilePath+":/home/blink/profile","--volumes-from","blinkbrowsers",prefixRepoLocal+image])
         dockerID = subprocess.check_output(["sudo","docker","ps","-l","-q"])
-        subprocess.call(["sudo","docker","commit",dockerID.decode().strip(),image])
+        subprocess.call(["sudo","docker","commit",dockerID.decode().strip(),prefixRepoLocal+image])
         print("Update of "+image+" complete")
 
     #We remove the update file
