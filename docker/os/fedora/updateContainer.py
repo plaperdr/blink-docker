@@ -9,10 +9,10 @@ def main():
     print("Blink Update script")
 
     #We update packages using the package manager
-    ret = subprocess.call(["sudo","yum","update","-y"])
+    ret = subprocess.call(["sudo","dnf","update","-y"])
     if ret != 0:
         print("Error while updating")
-    ret = subprocess.call(["sudo","yum","clean","all"])
+    ret = subprocess.call(["sudo","dnf","clean","all"])
     if ret != 0:
         print("Error while cleaning packages")
 
