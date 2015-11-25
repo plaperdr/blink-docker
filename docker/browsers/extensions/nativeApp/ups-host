@@ -61,12 +61,14 @@ class UPSAccessor():
     message = self.queue.get()
     if message == None:
       sys.exit(0)
-                
-    with open(profileFolder+"shared.pkl",'wb') as sharedFile:
-      pickle.dump(message,sharedFile,protocol=2)
 
-    with open(profileFolderChromium+"shared.pkl",'wb') as sharedFile:
-      pickle.dump(message,sharedFile,protocol=2)
+    if exists(profileFolder):
+      with open(profileFolder+"shared.pkl",'wb') as sharedFile:
+        pickle.dump(message,sharedFile,protocol=2)
+
+    if exists(profileFolderChromium):
+      with open(profileFolderChromium+"shared.pkl",'wb') as sharedFile:
+        pickle.dump(message,sharedFile,protocol=2)
 
 
 #################################  MAIN  #################################
