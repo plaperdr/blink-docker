@@ -17,6 +17,7 @@ def relativeToAbsoluteHomePath(path):
         return path
 
 profileFolder = relativeToAbsoluteHomePath("~/.config/google-chrome/Default/")
+profileFolderChromium = relativeToAbsoluteHomePath("~/.config/chromium/Default/")
 
 #################################  MESSAGES  #################################
 # Helper function that sends a message to the webapp.
@@ -64,6 +65,9 @@ class UPSAccessor():
     with open(profileFolder+"shared.pkl",'wb') as sharedFile:
       pickle.dump(message,sharedFile,protocol=2)
 
+    with open(profileFolderChromium+"shared.pkl",'wb') as sharedFile:
+      pickle.dump(message,sharedFile,protocol=2)
+
 
 #################################  MAIN  #################################
 def Main():
@@ -77,6 +81,10 @@ def Main():
   #SEND OPEN TABS
   if exists(profileFolder+"shared.pkl"):
     with open(profileFolder+"shared.pkl",'rb') as sharedFile:
+      message = pickle.load(sharedFile)
+      send_message(message)
+  if exists(profileFolderChromium+"shared.pkl"):
+    with open(profileFolderChromium+"shared.pkl",'rb') as sharedFile:
       message = pickle.load(sharedFile)
       send_message(message)
   
