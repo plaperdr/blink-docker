@@ -3,8 +3,6 @@
 
 from installUtils import *
 
-dockerImages = ["blinkfedorig","blinkubuorig","blinkfonts","blinkbrowsers"]
-
 def setupTorProxy():
     #Pull the Tor proxy image
     subprocess.call(["sudo","docker","pull","jess/tor-proxy"])

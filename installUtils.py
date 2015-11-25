@@ -7,6 +7,7 @@ from urllib.error import URLError
 
 prefixRepoHub = "plaperdr/"
 prefixRepoLocal = "blink/"
+dockerImages = ["blinkfedorig","blinkubuorig","blinkfonts","blinkbrowsers"]
 
 def downloadFile(file):
     try:
@@ -70,3 +71,12 @@ def updateDockerfile(filePath,userID,groupID):
     with open(filePath, 'w') as f:
         for line in newlines:
             f.write(line)
+
+
+def removeContainer(name):
+    print("Removing Docker container "+name)
+    subprocess.call(["sudo","docker","rm","-v",name])
+
+def removeImage(name):
+    print("Removing Docker image "+name)
+    subprocess.call(["sudo","docker","rm",name])
