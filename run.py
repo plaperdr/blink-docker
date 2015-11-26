@@ -13,7 +13,7 @@ from installUtils import prefixRepoLocal,prefixRepoHub
 
 osImages = ["blinkfed","blinkubu"]
 ubuntuName = "trusty"
-fedoraName = "fc21"
+fedoraName = "fc23"
 
 downloadsPath =  os.path.abspath("data/downloads")
 profilePath = os.path.abspath("data/profile")
@@ -162,8 +162,12 @@ def main():
                     "-v "+ldpreloadPath+":/home/blink/ldpreload " \
                     "--volumes-from blinkbrowsers " \
                     "--volumes-from blinkfonts " \
+                    "--device /dev/snd " \
+                    "-v /run/user/`id -u`/pulse/native:/run/user/`id -u`/pulse/native " \
+                    "-v /dev/shm:/dev/shm " \
+                    "-v /etc/machine-id:/etc/machine-id " \
+                    "-v /var/lib/dbus:/var/lib/dbus " \
                     "--net container:torproxy "+prefixRepoLocal
-
     if len(sys.argv) == 2:
         chosenImage = sys.argv[1]
     else :
