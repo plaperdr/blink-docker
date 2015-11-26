@@ -8,7 +8,7 @@ from os.path import expanduser,exists
 
 #################################  CONFIG  #################################
 def relativeToAbsoluteHomePath(path):
-    """ Tranforms a relative home path into an absolute one
+    """ Transforms a relative home path into an absolute one
     Argument:
     path -- the path that may need transformation"""
     if "~" in path:
@@ -16,8 +16,7 @@ def relativeToAbsoluteHomePath(path):
     else:
         return path
 
-profileFolder = relativeToAbsoluteHomePath("~/.config/google-chrome/Default/")
-profileFolderChromium = relativeToAbsoluteHomePath("~/.config/chromium/Default/")
+pickleFolder = relativeToAbsoluteHomePath("~/.config/")
 
 #################################  MESSAGES  #################################
 # Helper function that sends a message to the webapp.
@@ -62,14 +61,8 @@ class UPSAccessor():
     if message == None:
       sys.exit(0)
 
-    if exists(profileFolder):
-      with open(profileFolder+"shared.pkl",'wb') as sharedFile:
-        pickle.dump(message,sharedFile,protocol=2)
-
-    if exists(profileFolderChromium):
-      with open(profileFolderChromium+"shared.pkl",'wb') as sharedFile:
-        pickle.dump(message,sharedFile,protocol=2)
-
+    with open(pickleFolder+"shared.pkl",'wb') as sharedFile:
+      pickle.dump(message,sharedFile,protocol=2)
 
 #################################  MAIN  #################################
 def Main():
@@ -81,15 +74,11 @@ def Main():
   thread.start()
 
   #SEND OPEN TABS
-  if exists(profileFolder+"shared.pkl"):
-    with open(profileFolder+"shared.pkl",'rb') as sharedFile:
+  if exists(pickleFolder+"shared.pkl"):
+    with open(pickleFolder+"shared.pkl",'rb') as sharedFile:
       message = pickle.load(sharedFile)
       send_message(message)
-  if exists(profileFolderChromium+"shared.pkl"):
-    with open(profileFolderChromium+"shared.pkl",'rb') as sharedFile:
-      message = pickle.load(sharedFile)
-      send_message(message)
-  
+
   #LAUNCH WORKER
   while True:
     accessor.processMessages()

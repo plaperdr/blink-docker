@@ -13,7 +13,7 @@ class ChromeBase(Browser):
     def __init__(self,profileFolder,path):
         super().__init__()
         self.bookmarksFile = "Bookmarks"
-        self.openTabsFile = "shared.pkl"
+        self.openTabsFile = "/home/blink/.config/shared.pkl"
         self.passwordsFile = "Login\ Data"
         self.profileFolder = profileFolder
         self.chromePath = path
@@ -90,13 +90,13 @@ class ChromeBase(Browser):
     #################################  OPEN TABS  #################################
     def importOpenTabs(self):
         chromeTabs = json.dumps({"openTabs": self.jsonImportData["openTabs"],"passwordEncryption": self.jsonImportData["passwordEncryption"],"passwordStorage": self.jsonImportData["passwordStorage"]})
-        with open(self.profileFolder+self.openTabsFile,'wb') as sharedFile:
+        with open(self.openTabsFile,'wb') as sharedFile:
             pickle.dump(chromeTabs,sharedFile,protocol=2)
     
     
     def exportOpenTabs(self):
-        if os.path.isfile(self.profileFolder+self.openTabsFile):
-            with open(self.profileFolder+self.openTabsFile,'rb') as sharedFile:
+        if os.path.isfile(self.openTabsFile):
+            with open(self.openTabsFile,'rb') as sharedFile:
                 jsonTabs = pickle.load(sharedFile)
             data = json.loads(jsonTabs)
             self.passwordStorage = data["passwordStorage"]
@@ -170,3 +170,7 @@ class Chrome(ChromeBase):
 class Chromium(ChromeBase):
     def __init__(self):
         super().__init__("/home/blink/.config/chromium/Default/","chromium-browser")
+
+class Opera(ChromeBase):
+    def __init__(self):
+        super().__init__("/home/blink/.config/opera/",ChromeBase.find("opera","./browsers/opera/"))
