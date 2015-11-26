@@ -1,2 +1,2 @@
 #List of Fedora browsers
-browsersList = ['FirefoxRepo','Firefox','FirefoxESR','Chrome']
+browsersList = ['FirefoxRepo','Firefox','FirefoxESR','Chrome','Opera']

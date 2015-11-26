@@ -44,7 +44,8 @@ class Container(object):
         'Firefox':Firefox,
         'FirefoxESR':FirefoxESR,
         'Chrome':Chrome,
-        'Chromium':Chromium
+        'Chromium':Chromium,
+        'Opera':Opera
     }
 
     ### Init
