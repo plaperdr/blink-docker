@@ -79,4 +79,4 @@ def removeContainer(name):
 
 def removeImage(name):
     print("Removing Docker image "+name)
-    subprocess.call(["sudo","docker","rm",name])
+    subprocess.call(["sudo","docker","rmi",name])
