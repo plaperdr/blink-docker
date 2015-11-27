@@ -19,5 +19,5 @@ RUN wget -O firefox-esr.tar.bz2 "https://download.mozilla.org/?product=firefox-e
 RUN cp extensions/jid1-d1BM58Kj2zuEUg@jetpack.xpi firefox-latest/browser/extensions/ && cp extensions/jid1-d1BM58Kj2zuEUg@jetpack.xpi firefox-latest-esr/browser/extensions/
 RUN mkdir -p /home/blink/.mozilla/firefox/blink.default && cp extensions/extensions.json /home/blink/.mozilla/firefox/blink.default
 
-VOLUME /home/blink/browsers /home/blink/.mozilla/firefox /home/blink/.config/google-chrome /home/blink/.config/chromium /home/blink/.config/opera /etc/opt/chrome/ /etc/chromium
+VOLUME /home/blink/browsers /home/blink/.mozilla/firefox /home/blink/.config/ /etc/opt/chrome/ /etc/chromium
 CMD /bin/sh
