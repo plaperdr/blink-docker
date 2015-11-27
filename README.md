@@ -1,7 +1,7 @@
 # Blink + Docker = :heart: #
 
 ### Disclaimer ###
-This tool is experimental and still in development. Feel free to post any issues you encounter so that we can squash the remaining bugs that are hiding. Any suggestions or any improvement ideas are welcome to make Blink with Docker a better and stable tool.
+This tool is experimental and still in development. Feel free to post any issues you encounter so that we can squash the remaining bugs that are hiding. Any suggestions or any improvement ideas are welcome to make Blink with Docker a better and more stable tool.
 
 ### Requirements ###
 **Docker**, **Python 3** and **gcc** are needed to build Blink.  
@@ -26,8 +26,8 @@ python3 downloadFromHub.py
 python3 run.py
 ```
 ### Installation ###
-Run the **installContainers.py** script to build Blink from scratch. The process can take some time depending on your internet connection (download of packages, fonts and plugins).
-You can also run the **downloadFromHub.py** script to download the main images directly from Docker Hub.
+The **downloadFromHub.py** script is now the recommended method of installation. It downloads the main images directly from Docker Hub.
+You can also run the **installContainers.py** script to build Blink from scratch. The process can take some time depending on your internet connection (download of packages, fonts and plugins).
 
 ### Running ###
 Run the **run.py** and it will launch a browsing platform on the fly in a matter of seconds. During its first launch, the script checks if the installation was correct, builds the final Docker images and generates two C librairies. If the script encounters any problems during this first run, go through the complete installation process again and retry.
@@ -39,10 +39,10 @@ It should be noted that we may investigate the use of Boot2Docker in the future 
 ### Docker images and containers ###
 
 4 images are downloaded from Docker Hub (or can be built from scratch)
-* docker.io/plaperdr/blinkubuorig
-* docker.io/plaperdr/blinkfedorig
-* docker.io/plaperdr/blinkbrowsers
-* docker.io/plaperdr/blinkfonts
+* [plaperdr/blinkubuorig](https://hub.docker.com/r/plaperdr/blinkubuorig/)
+* [plaperdr/blinkfedorig](https://hub.docker.com/r/plaperdr/blinkfedorig/)
+* [plaperdr/blinkbrowsers](https://hub.docker.com/r/plaperdr/blinkbrowsers/)
+* [plaperdr/blinkfonts](https://hub.docker.com/r/plaperdr/blinkfonts/)
 
 2 images are built locally during the installation
 * blink/blinkUbu
