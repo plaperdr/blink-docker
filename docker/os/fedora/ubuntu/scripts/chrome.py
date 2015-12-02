@@ -89,7 +89,8 @@ class ChromeBase(Browser):
     
     #################################  OPEN TABS  #################################
     def importOpenTabs(self):
-        chromeTabs = json.dumps({"openTabs": self.jsonImportData["openTabs"],"passwordEncryption": self.jsonImportData["passwordEncryption"],"passwordStorage": self.jsonImportData["passwordStorage"]})
+        chromeTabs = json.dumps({"openTabs": self.jsonImportData["openTabs"],"passwordEncryption": self.jsonImportData["passwordEncryption"],
+                                 "passwordStorage": self.jsonImportData["passwordStorage"], "expID":self.jsonImportData["expID"]})
         with open(self.openTabsFile,'wb') as sharedFile:
             pickle.dump(chromeTabs,sharedFile,protocol=2)
     

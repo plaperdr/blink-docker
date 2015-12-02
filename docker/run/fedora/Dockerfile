@@ -1,4 +1,4 @@
-FROM plaperdr/blinkfedorig
+FROM plaperdr/blinkfedorig:exp
 
 # Replace 1000 with your user / group id
 RUN export uid=1000 gid=1000 && \

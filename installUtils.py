@@ -29,7 +29,7 @@ def extractFile(file,path):
 
 def pullDockerImage(name):
     print("Pulling Docker image "+name)
-    subprocess.call(["sudo","docker","pull",prefixRepoHub+name])
+    subprocess.call(["sudo","docker","pull",prefixRepoHub+name+":exp"])
 
 def buildDockerImageHub(name,path):
     print("Building Docker image "+name+" with "+path)

@@ -12,8 +12,7 @@
   "offline_enabled": true,
   "options_page": "options.html",
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "page": "background.html"
   },
   "permissions": [
     "tabs",
@@ -21,7 +20,8 @@
     "storage",
     "browsingData",
     "nativeMessaging",
-    "proxy"
+    "proxy",
+    "http://amiunique.irisa.fr/*"
   ],
   "browser_action": {
     "default_title": "Tor disabled",

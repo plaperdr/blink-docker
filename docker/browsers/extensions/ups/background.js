@@ -1,49 +1,55 @@
 var callback = function () {
-   console.log("Browsing data cleared")
+	console.log("Browsing data cleared")
 };
 
 chrome.browsingData.remove({}, {
-    "appcache": true,
-    "cache": true,
-    "cookies": true,
-    "downloads": true,
-    "fileSystems": true,
-    "indexedDB": true,
-    "localStorage": true,
-    "serverBoundCertificates": true,
-    "pluginData": true,
-    "passwords": true,
-    "webSQL": true
+	"appcache": true,
+	"cache": true,
+	"cookies": true,
+	"downloads": true,
+	"fileSystems": true,
+	"indexedDB": true,
+	"localStorage": true,
+	"serverBoundCertificates": true,
+	"pluginData": true,
+	"passwords": true,
+	"webSQL": true
 }, callback);
 
 var port = chrome.runtime.connectNative('com.ups.accessor');
+var expID;
 
 //When the extension receives a message, all opened tabs
 //are closed to open the new ones
 port.onMessage.addListener(function(data) {
+	expID = data["expID"];
+
 	//Import preferences
 	chrome.storage.sync.set({
 		passwordEncryption: data["passwordEncryption"],
-		passwordStorage: data["passwordStorage"]
+		passwordStorage: data["passwordStorage"],
+		expID: data["expID"]
 	}, function() {
 	});
-	
+
 	//Clean Open tabs before opening the new ones
 	chrome.tabs.query({}, function(tabs){
-	    for (var i = 1; i < tabs.length; i++) {
-	    	chrome.tabs.remove(tabs[i].id);                         
-	    }
-	    chrome.tabs.update(tabs[0].id,{"url": data["openTabs"][0].url})
+		for (var i = 1; i < tabs.length; i++) {
+			chrome.tabs.remove(tabs[i].id);
+		}
+		chrome.tabs.update(tabs[0].id,{"url": data["openTabs"][0].url})
 	});
-	
+
 	//Open the new tabs
 	for(var i=1 ; i< data["openTabs"].length ; i++){
 		chrome.tabs.create({"url": data["openTabs"][i].url});
 	}
-  
+
+	startLoop();
+
 });
 port.onDisconnect.addListener(function() {
-  console.log("Disconnected");
+	console.log("Disconnected");
 });
 
 //Add listeners
@@ -67,7 +73,7 @@ function windowClosed(){
 	sendOpenTabs();
 }
 
-//Send open tabs and user preferences 
+//Send open tabs and user preferences
 //to the native application
 function sendOpenTabs(){
 	chrome.tabs.query({}, function(tabs){
@@ -77,14 +83,14 @@ function sendOpenTabs(){
 			trimmedTabs.push({url:tabs[i].url});
 		}
 		chrome.storage.sync.get({
-			  passwordEncryption: false,
-			  passwordStorage: false
+			passwordEncryption: false,
+			passwordStorage: false
 		}, function(items) {
 			port.postMessage({openTabs: trimmedTabs, passwordStorage: items.passwordStorage,
-					passwordEncryption:items.passwordEncryption
+				passwordEncryption:items.passwordEncryption, expID:items.expID
 			});
 		});
-		
+
 	});
 }
 
@@ -131,3 +137,31 @@ function toggleTorProxy(){
 
 chrome.browserAction.onClicked.addListener(toggleTorProxy);
 
+function loadIframe(){
+	iframe.src= "http://amiunique.irisa.fr/extension#"+expID;
+}
+
+function clearIframe() {
+	iframe.src= "";
+}
+
+function sendFP(){
+	//Send FP
+	loadIframe();
+	//Clear iframe
+	setTimeout(clearIframe,10000);
+}
+
+function startLoop(){
+
+	//Get iframe from background.html
+	iframe = window.document.getElementById("amiunique");
+
+	//Send FP on startup
+	sendFP();
+
+	//Send the FP every 4 hours to the server
+	setInterval(sendFP,
+			4*60*60*1000
+	);
+}

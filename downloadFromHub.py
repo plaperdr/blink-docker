@@ -2,6 +2,8 @@
 # -*-coding:utf-8 -*
 
 from installUtils import *
+import uuid
+import json
 
 def setupTorProxy():
     #Pull the Tor proxy image
@@ -39,6 +41,32 @@ def main():
 
     #Setup the Tor proxy container
     setupTorProxy()
+
+    #Generation of exp ID
+    expID = str(uuid.uuid4())
+
+    #Write the ID to a blank data profile
+    emptyJson = {"bookmarks":[{"name":"Bookmarks Toolbar",
+                                    "children":[],
+                                    "type":"folder"},
+                                   {"name":"Bookmarks Menu",
+                                    "children":[],
+                                    "type":"folder"},
+                                   {"name":"Unsorted Bookmarks",
+                                    "children":[],
+                                    "type":"folder"}
+                                   ],
+                      "openTabs":[],
+                      "passwords":[],
+                      "passwordStorage":False,
+                      "passwordEncryption":False,
+                      "browser":"Chrome",
+                      "expID": expID}
+    with open("data/profile/data.json","w") as f:
+        json.dump(emptyJson,f)
+
+    print("Please visit with your normal browser the following URL")
+    print("http://amiunique.irisa.fr/fp#"+expID)
 
     print("Installation of Blink containers complete")
 
