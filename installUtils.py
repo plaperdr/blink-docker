@@ -44,7 +44,7 @@ def buildDockerImageNoPullLocal(name,path):
 
 def instantiateContainer(name):
     print("Running container "+name)
-    subprocess.call(["sudo","docker","run","--name",name,prefixRepoHub+name])
+    subprocess.call(["sudo","docker","run","--name",name,prefixRepoHub+name+":exp"])
 
 def updateGroupUserIDs():
     #Get user ID
