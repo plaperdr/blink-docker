@@ -62,7 +62,7 @@ def main():
                       "passwordEncryption":False,
                       "browser":"Chrome",
                       "expID": expID}
-    with open("data/profile/data.json","w") as f:
+    with open("../data/profile/data.json","w") as f:
         json.dump(emptyJson,f)
 
     print("Please visit with your normal browser the following URL")
