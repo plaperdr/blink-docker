@@ -33,21 +33,21 @@ class ChromeBase(Browser):
                       "passwordStorage":False,
                       "passwordEncryption":False,
                       "browser":"Chrome"}
-        
+        self.jsonExportData  = jsonDataStructure
+
         if os.path.isfile(self.dataPath):
             self.jsonImportData = utils.readJSONDataFile(self.dataPath)
             self.passwordStorage = self.jsonImportData["passwordStorage"]
             self.passwordEncryption = self.jsonImportData["passwordEncryption"]
-            
+            self.jsonExportData["expID"] = self.jsonImportData["expID"]
         else :
             self.jsonImportData = jsonDataStructure
             self.passwordStorage = False
             self.passwordEncryption = False
         
-        self.jsonExportData  = jsonDataStructure
-        self.jsonExportData["passwordStorage"] = self.passwordStorage 
+        self.jsonExportData["passwordStorage"] = self.passwordStorage
         self.jsonExportData["passwordEncryption"] = self.passwordEncryption
-    
+
     #################################  BROWSER  #################################
     @staticmethod
     def find(name, path):
