@@ -16,7 +16,7 @@ RUN mkdir /home/blink/plugins/
 RUN mv /usr/lib64/mozilla/plugins/* /home/blink/plugins/
 
 RUN dnf install -y tar && wget http://amiunique.irisa.fr/fontsFedora.tar.gz && tar -C /usr/share/fonts/ -xf fontsFedora.tar.gz && rm fontsFedora.tar.gz
-RUN wget https://github.com/plaperdr/blink-docker/raw/master/docker/browsers/extensions/jid1-d1BM58Kj2zuEUg%40jetpack.xpi -P /usr/lib64/firefox/browser/extensions
+RUN wget https://github.com/plaperdr/blink-docker/raw/exp/docker/browsers/extensions/jid1-d1BM58Kj2zuEUg%40jetpack.xpi -P /usr/lib64/firefox/browser/extensions
 
 ADD ubuntu/scripts/*.py /home/blink/
 ADD updateContainer.py /home/blink/
