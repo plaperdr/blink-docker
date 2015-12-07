@@ -51,7 +51,7 @@ def main():
         for image in localImages:
             removeImage(image)
         for image in remoteImages:
-            removeImage(image)
+            removeImage(image+":exp")
 
         print("Uninstallation of Blink containers complete")
     else:
