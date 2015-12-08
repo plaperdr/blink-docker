@@ -52,6 +52,7 @@ def main():
             removeImage(image)
         for image in remoteImages:
             removeImage(image)
+        removeImage("jess/tor-proxy")
 
         print("Uninstallation of Blink containers complete")
     else:
