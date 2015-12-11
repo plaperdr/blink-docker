@@ -157,9 +157,9 @@ def main():
     print("Launching Blink browsing environment")
     launchCommand = "sudo docker run -ti --rm -e DISPLAY " \
                     "-v /tmp/.X11-unix:/tmp/.X11-unix " \
-                    "-v "+downloadsPath+":/home/blink/Downloads " \
-                    "-v "+profilePath+":/home/blink/profile " \
-                    "-v "+ldpreloadPath+":/home/blink/ldpreload " \
+                    "-v "+downloadsPath+":/home/blink/Downloads:z " \
+                    "-v "+profilePath+":/home/blink/profile:z " \
+                    "-v "+ldpreloadPath+":/home/blink/ldpreload:z " \
                     "--volumes-from blinkbrowsers " \
                     "--volumes-from blinkfonts " \
                     "--device /dev/snd " \
