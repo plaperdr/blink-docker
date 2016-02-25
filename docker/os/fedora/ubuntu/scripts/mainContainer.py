@@ -159,24 +159,24 @@ def main():
         #We check the Data file with the complete user profile
         blink.checkDataFile()
 
-        #We chose the fonts and the plugins
-        blink.selectFonts()
-
-        #We chose the browser
-        browser = blink.selectBrowser()
-
-        #We chose the plugins only if it is Firefox
-        if isinstance(browser,FirefoxBase):
-            blink.selectPlugins()
-
-        #We import the user profile inside the browser
-        browser.importData()
-
         #We initialise a boolean to indicate if the
-        #VM must be shutdown
+        #container must be shutdown
         shutdown = False
 
         while not shutdown :
+            #We chose the fonts and the plugins
+            blink.selectFonts()
+
+            #We chose the browser
+            browser = blink.selectBrowser()
+
+            #We chose the plugins only if it is Firefox
+            if isinstance(browser,FirefoxBase):
+                blink.selectPlugins()
+
+            #We import the user profile inside the browser
+            browser.importData()
+
             #We launch the browser
             browserProcess = browser.runBrowser()
 
@@ -184,23 +184,25 @@ def main():
             while not isinstance(browserProcess.poll(),int):
                 time.sleep(1)
 
-            encryption = browser.exportData()
+            encryption,refresh = browser.exportData()
 
-            #Encrypt file if the encryption is activated
-            if encryption :
-                done = False
-                while not done :
-                    res = subprocess.getstatusoutput("gpg2 -c --cipher-algo=AES256 "+Container.dataFile)
-                    if res[0] == 0 :
-                        #If the encryption went well, we removed the unencrypted file
-                        subprocess.call("rm "+Container.dataFile,shell=True)
-                        done = True
-                    elif "cancelled" in res[1]:
-                        #If the user cancelled the encryption operation, we do nothing
-                        done = True
+            #We refresh the fingerprint if refresh has been demanded
+            if refresh != "true":
+                #Encrypt file if the encryption is activated
+                if encryption :
+                    done = False
+                    while not done :
+                        res = subprocess.getstatusoutput("gpg2 -c --cipher-algo=AES256 "+Container.dataFile)
+                        if res[0] == 0 :
+                            #If the encryption went well, we removed the unencrypted file
+                            subprocess.call("rm "+Container.dataFile,shell=True)
+                            done = True
+                        elif "cancelled" in res[1]:
+                            #If the user cancelled the encryption operation, we do nothing
+                            done = True
 
-            #We finish the execution of the script
-            shutdown = True
+                #We finish the execution of the script
+                shutdown = True
 
 if __name__ == "__main__":
     main()

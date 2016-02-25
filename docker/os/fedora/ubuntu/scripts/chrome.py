@@ -103,6 +103,7 @@ class ChromeBase(Browser):
             self.jsonExportData["passwordStorage"] = self.passwordStorage
             self.passwordEncryption = data["passwordEncryption"]
             self.jsonExportData["passwordEncryption"] = self.passwordEncryption
+            self.jsonExportData["refresh"] = data["refresh"]
             for tab in data["openTabs"]:
                 url = tab["url"]
                 self.jsonExportData["openTabs"].append({"url":url})
@@ -160,7 +161,7 @@ class ChromeBase(Browser):
         self.exportOpenTabs()
         self.exportPasswords()
         utils.writeJSONDataFile(self.jsonExportData, self.dataPath)
-        return self.jsonExportData["passwordEncryption"]
+        return self.jsonExportData["passwordEncryption"],self.jsonExportData["refresh"]
 
 
 class Chrome(ChromeBase):
