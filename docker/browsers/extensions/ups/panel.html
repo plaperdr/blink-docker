@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blink</title>
+    <link rel='stylesheet' href='dependencies/materialize.min.css'>
+    <link rel='stylesheet' href='panel.css'>
+
+    <script src="panel.js"></script>
+    <script src="dependencies/jquery-2.2.0.min.js"></script>
+    <script src="dependencies/materialize.min.js"></script>
+</head>
+<body>
+<div style="width: 250px" class="container">
+    <div class="col s8 offset-s2">
+        <img class="logo" src="imgs/icon-square.png">
+        <h5 class="title">Blink dashboard</h5>
+        <br>
+        <div id="message" class="logo">
+            <div class="card-panel msg" style="">
+                Tor proxy
+                <br>
+                <div class="switch">
+                    <label>
+                        Off
+                        <input type="checkbox" id="check">
+                        <span class="lever"></span>
+                        On
+                    </label>
+                </div>
+                <br>
+                <div id="connDiv" style="display: none">
+                <input type="checkbox" class="filled-in" id="connected" disabled="disabled"/>
+                <label for="connected">Connected</label>
+                </div>
+                <div class="preloader-wrapper small active" id="loader" style="display: none">
+                    <div class="spinner-layer spinner-green-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                    </div>
+                </div>
+                <div id="error" style="display: none">
+                    Connection failed: check that the Docker Tor Proxy container is started.
+                </div>
+            </div>
+        </div>
+
+        <button id="refreshFingerprint" class="waves-effect waves-light btn btnBl"><img src="imgs/refresh-24.svg" style="vertical-align: -22%">&nbsp; Refresh fingerprint</button>
+        <button id="viewFingerprint" class="waves-effect waves-light btn btnBl"><img src="imgs/fp-24.svg" style="vertical-align: -22%">&nbsp; View my fingerprint</button>
+
+    </div>
+
+</div>
+
+</body>
+</html>

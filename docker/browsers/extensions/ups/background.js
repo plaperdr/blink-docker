@@ -24,7 +24,9 @@ port.onMessage.addListener(function(data) {
 	//Import preferences
 	chrome.storage.sync.set({
 		passwordEncryption: data["passwordEncryption"],
-		passwordStorage: data["passwordStorage"]
+		passwordStorage: data["passwordStorage"],
+		connected: false,
+		errorConnection: false
 	}, function() {
 	});
 	
@@ -49,27 +51,29 @@ port.onDisconnect.addListener(function() {
 //Add listeners
 chrome.tabs.onCreated.addListener(tabCreated);
 function tabCreated(){
-	sendOpenTabs();
+	sendData(false);
 }
 
 chrome.tabs.onRemoved.addListener(tabRemoved);
 function tabRemoved(){
-	sendOpenTabs();
+	sendData(false);
 }
 
 chrome.tabs.onUpdated.addListener(tabUpdated);
 function tabUpdated(){
-	sendOpenTabs();
+	sendData(false);
 }
 
 chrome.windows.onRemoved.addListener(windowClosed);
 function windowClosed(){
-	sendOpenTabs();
+	sendData(false);
 }
 
 //Send open tabs and user preferences 
 //to the native application
-function sendOpenTabs(){
+//Refresh indicates if a new environment
+//should be created
+function sendData(refresh){
 	chrome.tabs.query({}, function(tabs){
 		trimmedTabs = [];
 		var i;
@@ -80,8 +84,11 @@ function sendOpenTabs(){
 			  passwordEncryption: false,
 			  passwordStorage: false
 		}, function(items) {
-			port.postMessage({openTabs: trimmedTabs, passwordStorage: items.passwordStorage,
-					passwordEncryption:items.passwordEncryption
+			port.postMessage({
+				openTabs: trimmedTabs,
+				passwordStorage: items.passwordStorage,
+				passwordEncryption:items.passwordEncryption,
+				refresh: refresh
 			});
 		});
 		
@@ -89,45 +96,25 @@ function sendOpenTabs(){
 }
 
 
-//Management of Tor proxy
-function toggleTorProxy(){
-	chrome.browserAction.getTitle({},function(res){
+//Idle state detection
+/*
+chrome.idle.setDetectionInterval(17);
+chrome.idle.onStateChanged.addListener(function(newState){
+	console.log("onStateChanged: " + newState);
+});
+setInterval(function() {
+	chrome.idle.queryState(17,function (newState) {
+		console.log("State: " + newState);
+	});
+}, 3000);
+*/
 
-		if(res == "Tor disabled"){
-			//Enabling Tor proxy (use of SOCKS5 proxy)
-			var torConfig = {
-				mode: "fixed_servers",
-				rules: {
-					singleProxy: {
-						scheme: "socks5",
-						host: "localhost",
-						port: 9050
-					},
-					bypassList: ["localhost", "127.0.0.1"]
-				}
-			};
-			chrome.proxy.settings.set(
-					{value: torConfig, scope: 'regular'},
-					function() {
-						//Change icon and title
-						chrome.browserAction.setIcon({path:"imgs/tor-enabled-24.png"});
-						chrome.browserAction.setTitle({title:"Tor enabled"});
-					}
-			);
-		} else {
-			//Disabling Tor proxy
-			chrome.proxy.settings.clear(
-					{scope: 'regular'},
-					function() {
-						//Change icon and title
-						chrome.browserAction.setIcon({path:"imgs/tor-disabled-24.png"});
-						chrome.browserAction.setTitle({title:"Tor disabled"});
-					}
-			);
-
+//Refresh current fingerprint
+function refreshFingerprint(){
+	sendData(true);
+	chrome.windows.getAll(function (windows) {
+		for(var i=0;i<windows.length;i++) {
+			chrome.windows.remove(windows[i].id);
 		}
 	});
 }
-
-chrome.browserAction.onClicked.addListener(toggleTorProxy);
-

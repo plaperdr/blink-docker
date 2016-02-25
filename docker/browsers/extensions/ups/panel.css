@@ -1,0 +1,46 @@
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100px;
+}
+
+.title {
+    text-align: center;
+    margin: 0;
+}
+
+.subtitle {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.btnBl {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    width: 215px;
+    font-size: 11px;
+}
+
+.btnVer {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    width: 160px;
+    font-size: 11px;
+}
+
+.msg {
+    text-align: center;
+    font-size:1.5em;
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+#message {
+    width: 200px;
+}
