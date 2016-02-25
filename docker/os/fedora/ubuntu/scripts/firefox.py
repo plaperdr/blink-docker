@@ -15,7 +15,7 @@ class FirefoxBase(Browser):
             
     def exportData(self):
         jsonExportData = utils.readJSONDataFile(self.dataPath)
-        return jsonExportData["passwordEncryption"]
+        return jsonExportData["passwordEncryption"],jsonExportData["refresh"]
             
     def runBrowser(self):
         return subprocess.Popen("LD_PRELOAD=/home/blink/ldpreload/modUname.so "+self.firefoxPath+" -no-remote -setDefaultBrowser -profile /home/blink/.mozilla/firefox/blink.default", shell=True)
