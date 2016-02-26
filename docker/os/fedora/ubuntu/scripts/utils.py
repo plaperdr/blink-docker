@@ -5,7 +5,7 @@ import json
 from os.path import expanduser
 
 def relativeToAbsoluteHomePath(path):
-    """ Tranforms a relative home path into an absolute one
+    """ Transforms a relative home path into an absolute one
     Argument:
     path -- the path that may need transformation"""
     if "~" in path:
