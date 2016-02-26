@@ -187,7 +187,7 @@ def main():
             encryption,refresh = browser.exportData()
 
             #We refresh the fingerprint if refresh has been demanded
-            if refresh != "true":
+            if not refresh:
                 #Encrypt file if the encryption is activated
                 if encryption :
                     done = False
