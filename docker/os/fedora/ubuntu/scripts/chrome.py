@@ -32,6 +32,7 @@ class ChromeBase(Browser):
                       "passwords":[],
                       "passwordStorage":False,
                       "passwordEncryption":False,
+                      "refresh":False,
                       "browser":"Chrome"}
         
         if os.path.isfile(self.dataPath):

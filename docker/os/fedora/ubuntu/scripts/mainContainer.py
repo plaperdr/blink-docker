@@ -118,8 +118,9 @@ class Container(object):
                              {"name":"Unsorted Bookmarks","children":[],"type":"folder"}],
                         "openTabs":[],
                         "passwords":[],
-                        "passwordStorage":"false",
-                        "passwordEncryption":"false",
+                        "passwordStorage":False,
+                        "passwordEncryption":False,
+                        "refresh": False,
                         "browser":"Firefox"}
             utils.writeJSONDataFile(jsonData,Container.dataFile)
 
