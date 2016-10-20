@@ -151,14 +151,14 @@ class ChromeBase(Browser):
     def importData(self):
         if os.path.isdir(self.profileFolder):
             print("Data import")
-            self.importBookmarks()
+            #self.importBookmarks()
             self.importOpenTabs()
             self.importPasswords()
         
         
     def exportData(self):
         print("Data export")
-        self.exportBookmarks()
+        #self.exportBookmarks()
         self.exportOpenTabs()
         self.exportPasswords()
         utils.writeJSONDataFile(self.jsonExportData, self.dataPath)
