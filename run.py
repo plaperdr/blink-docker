@@ -18,6 +18,7 @@ fedoraName = "fc23"
 downloadsPath =  os.path.abspath("data/downloads")
 profilePath = os.path.abspath("data/profile")
 ldpreloadPath = os.path.abspath("ldpreload")
+seccompPath = os.path.abspath("seccomp/chrome.json")
 
 def checkInstallation():
     #Check the presence of the two main containers
@@ -167,6 +168,7 @@ def main():
                     "-v /dev/shm:/dev/shm " \
                     "-v /etc/machine-id:/etc/machine-id " \
                     "-v /var/lib/dbus:/var/lib/dbus " \
+                    "--security-opt seccomp:"+seccompPath+" " \
                     "--net container:torproxy "+prefixRepoLocal
     if len(sys.argv) == 2:
         chosenImage = sys.argv[1]
