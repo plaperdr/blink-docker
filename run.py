@@ -19,6 +19,7 @@ downloadsPath =  os.path.abspath("data/downloads")
 profilePath = os.path.abspath("data/profile")
 ldpreloadPath = os.path.abspath("ldpreload")
 seccompPath = os.path.abspath("seccomp/chrome.json")
+timezonePath = "/usr/share/zoneinfo/"
 
 def checkInstallation():
     #Check the presence of the two main containers
@@ -36,6 +37,13 @@ def checkInstallation():
     #If the installation is correct, we generate the LD Preload libraries
     generateLibrairies()
 
+def getRandomTimezone():
+    timezone = []
+    for path, subdirs, files in os.walk(timezonePath):
+        for name in files:
+            timezone.append(os.path.join(path, name)[len(timezonePath):])
+    timezone = [t for t in timezone if "posix" not in t and "right" not in t and ".tab" not in t]
+    return timezone[random.randint(0,len(timezone)-1)]
 
 def generateLibrairies():
 
@@ -155,6 +163,15 @@ def main():
             writeInstallComplete(1)
             updateBrowsers()
 
+    if len(sys.argv) == 2:
+        chosenImage = sys.argv[1]
+    else :
+        chosenImage = osImages[random.randint(0,len(osImages)-1)]
+    print("Image " + chosenImage + " chosen")
+
+    chosenTimezone = getRandomTimezone()
+    print(chosenTimezone+" timezone chosen")
+
     print("Launching Blink browsing environment")
     launchCommand = "sudo docker run -ti --rm -e DISPLAY " \
                     "-v /tmp/.X11-unix:/tmp/.X11-unix " \
@@ -169,11 +186,8 @@ def main():
                     "-v /etc/machine-id:/etc/machine-id " \
                     "-v /var/lib/dbus:/var/lib/dbus " \
                     "--security-opt seccomp:"+seccompPath+" " \
-                    "--net container:torproxy "+prefixRepoLocal
-    if len(sys.argv) == 2:
-        chosenImage = sys.argv[1]
-    else :
-        chosenImage = osImages[random.randint(0,len(osImages)-1)]
+                    "--net container:torproxy " \
+                    "-e TZ="+chosenTimezone+" "+prefixRepoLocal
 
     #We select the corresponding LD Preload library
     if chosenImage is "blinkfed":
@@ -183,8 +197,6 @@ def main():
 
     #Start Tor proxy
     startTorProxy()
-
-    print("Image "+chosenImage+" chosen")
     subprocess.call(launchCommand+chosenImage,shell=True)
 
     #When browsing is finished, we stop the Tor proxy container
