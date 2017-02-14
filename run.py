@@ -12,8 +12,8 @@ from installContainers import buildDockerImageLocal,instantiateContainer
 from installUtils import prefixRepoLocal,prefixRepoHub
 
 osImages = ["blinkfed","blinkubu"]
-ubuntuName = "trusty"
-fedoraName = "fc23"
+ubuntuName = "xenial"
+fedoraName = "fc25"
 
 downloadsPath =  os.path.abspath("data/downloads")
 profilePath = os.path.abspath("data/profile")
