@@ -61,9 +61,8 @@ def generateLibrairies():
     #Ubuntu
     #We retrieve the kernel version of Ubuntu
     #ex: 3.13.0-24-generic
-    ubuSource = urllib.request.urlopen("http://packages.ubuntu.com/search?keywords=linux-image&searchon=names&suite="+
-                                       ubuntuName+"&section=main").read()
-    ubuKernel = re.search("linux-image-(.*?)\">",str(ubuSource)).group(1)
+    ubuSource = urllib.request.urlopen("https://packages.ubuntu.com/"+ubuntuName+"/linux-image-generic").read()
+    ubuKernel = re.search("linux-image-([\.\w-]*?)-generic",str(ubuSource)).group(1)+"-generic"
     #We write the header file
     with open('ldpreload/modUname.h', 'w') as f:
         f.write("#define RELEASE \""+ubuKernel+"\"")
