@@ -173,6 +173,7 @@ def main():
 
     print("Launching Blink browsing environment")
     launchCommand = "sudo docker run -ti --rm -e DISPLAY " \
+                    "--group-add $(getent group audio | cut -d: -f3) " \
                     "-v /tmp/.X11-unix:/tmp/.X11-unix " \
                     "-v "+downloadsPath+":/home/blink/Downloads:z " \
                     "-v "+profilePath+":/home/blink/profile:z " \
