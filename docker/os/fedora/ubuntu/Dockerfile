@@ -15,7 +15,7 @@ RUN mkdir -p /home/blink/.mozilla/plugins/
 RUN mkdir /home/blink/plugins/
 RUN rm /usr/lib/mozilla/plugins/flash*.so && mv /usr/lib/mozilla/plugins/* /home/blink/plugins/ && mv /usr/lib/adobe-flashplugin/libflashplayer.so /home/blink/plugins/
 
-RUN wget http://amiunique.irisa.fr/fontsUbuntu.tar.gz && tar -C /usr/share/fonts/ -xf fontsUbuntu.tar.gz && rm fontsUbuntu.tar.gz
+RUN wget https://github.com/plaperdr/blink-fonts/raw/master/fontsUbuntu.tar.gz && tar -C /usr/share/fonts/ -xf fontsUbuntu.tar.gz && rm fontsUbuntu.tar.gz
 RUN wget https://github.com/plaperdr/blink-docker/raw/master/docker/browsers/extensions/jid1-d1BM58Kj2zuEUg%40jetpack.xpi -P /usr/lib/firefox/browser/extensions
 
 ADD scripts/*.py /home/blink/
